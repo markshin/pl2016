@@ -11,7 +11,7 @@
 
 ## Announcements
 
-- TBA
+- There will be a lab session on 2016/03/08 (Tue).
 
 ## Homeworks
 
