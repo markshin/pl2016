@@ -13,7 +13,7 @@
 
 - There will be a lab session on 2016/03/08 (Tue).
 
-## Homeworks
+## Assignments
 
 | Due        	| Description 	 	 	 	 	 	 	 	 	 	 	 	 	 	| Notes 	|
 |------------	|---------------------------------------------------------------	|-------	|
@@ -25,7 +25,7 @@
 
 ### Grading
 
-- Homework: 45%
+- Assignments: 45%
     + Coq problems in the [software foundations material](http://www.cis.upenn.edu/~bcpierce/sf/current/index.html). Read carefully the next subsections.
 - Exams: 50% (mid-term 20% and final 30%)
     + You will solve Coq problems at the lab during the exam.
@@ -48,7 +48,7 @@
 
 - Install Coq.
     + Linux
-        * Install [opam](http://opam.ocaml.org/doc/Install.html), and make sure you can use OCaml 4.01.0.
+        * Install [opam](http://opam.ocaml.org/doc/Install.html), and make sure you can use OCaml 4.02.3.
         * Install `libgtk2` by `sudo apt-get install libgtk2.0-dev` or `sudo yum install gtk2-devel`.
         * Install lablgtk2 by `opam install lablgtk`
         * Download [tarball](https://coq.inria.fr/distrib/V8.4pl5/files/coq-8.4pl5.tar.gz) file.
@@ -64,6 +64,23 @@
         * In OS X, at first run, you may see an error message saying "Failed to load coqtop." Then click "No", and then find `/Applications/CoqIDE_8.4pl5.app/Contents/Resources/bin/coqtop` and open for once. Then goto `CoqIDE` > `Preferences` > `Externals`. And then change `coqtop` into `/Applications/CoqIDE_8.4pl5.app/Contents/Resources/bin/coqtop`.
     + Emacs: [Company-Coq](https://github.com/cpitclaudel/company-coq). Follow the setup instructions.
 
-### Homework
+### Textbook: Software Foundations
 
-- TBA
+- The textbook is in this repository's `sf/` directory.
+- *DO NOT DOWNLOAD* the textbook from [The official Software Foundation website](https://www.cis.upenn.edu/~bcpierce/sf/current/index.html) in order to keep in sync.
+
+### Assignment
+
+#### Honor Code: *DO NOT CHEAT*
+
+- If you copy others' source code, you will get F.
+- "Others' source code" includes other students' and resources around the web. Especially, do not consult with public repositories on software foundations.
+- Note that we have a good automatic clone detector. I found out that a lot of students cheated last time. I hope we all be happy at the end of the semester..
+
+#### Submission
+
+TBA
+
+### Misc.
+
+- I strongly recommend you to use [Git](http://git-scm.com/) for the course. Register at [GitHub](https://github.com). [Try Git](https://try.github.io/levels/1/challenges/1).
