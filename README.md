@@ -44,7 +44,9 @@
 ### Coq
 
 - Use Coq [8.4pl6](https://coq.inria.fr/coq-84).  *DO NOT* use Coq 8.5!
-- TBA
+- Use IDEs supporting Coq.
+    + CoqIDE: Download those bundled with CoqIDE in the [Download page](https://coq.inria.fr/coq-84).
+    + Emacs: [Company-Coq](https://github.com/cpitclaudel/company-coq). Follow the setup instructions.
 
 ### Homework
 
