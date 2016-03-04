@@ -15,9 +15,9 @@
 
 ## Assignments
 
-| Due        	| Description 	 	 	 	 	 	 	 	 	 	 	 	 	 	| Notes 	|
-|------------	|---------------------------------------------------------------	|-------	|
-| TBA			| [Assignment 01](TBA) ([status](TBA))							 	|       	|
+| Due        	| Description                   	 	 	 	 	 	 	 	 	 	 	 	 	 	| Notes 	|
+|------------	|-----------------------------------------------------------------------------------	|-------	|
+| NO			| [Assignment 00](https://github.com/snu-sf-class/pl2016/tree/master/assignments/00)    | No scores	|
 
 ## Must Read
 
@@ -30,7 +30,7 @@
 - Exams: 50% (mid-term 20% and final 30%)
     + You will solve Coq problems at the lab during the exam.
 - Attendance: 5%
-    + -TBA% per absence.  *IMPORTANT: 6 absences make an F*.
+    + -1% per absence.  *IMPORTANT: 6 absences make an F*.
 
 ### Questions
 
@@ -79,7 +79,17 @@
 
 #### Submission
 
-TBA
+- `assignments/$NAME` directory is the assignment `$NAME`.
+    + You submit `P??.v` files.  You should edit only `P??.v`. *DO NOT TOUCH ANYTHING ELSE*.
+    + `E??.v` files are for evaluation.
+    + Everything else are for relevant the definitions for the assignment.
+- Edit `P??.v` files to do the assignment.
+- `make` to compile your submission.  `make eval` to grade your submission yourself. 
+- Both `make` and `make eval` *SHOULD SUCCEED*. If not, your score will be 0.
+- Check your submission by `../check.sh`
+    + `P??.v` files *SHOULD NOT* contain `admit` and `Admitted`.
+    + If a `P??.v` file contains string `GIVEUP`, then it will be scored 0.
+- TBA
 
 ### Misc.
 

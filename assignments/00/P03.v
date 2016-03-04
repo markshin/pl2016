@@ -5,12 +5,12 @@ Require Export P02.
     yielding a [b]oolean.  Use [Fixpoint] to define it. *)
 
 Definition blt_nat (n m : nat) : bool :=
-  (* FILL IN HERE *) admit.
+  GIVEUP.
 
 Example test_blt_nat1:             (blt_nat 2 2) = false.
-(* FILL IN HERE *) Admitted.
+exact GIVEUP. Qed.
 Example test_blt_nat2:             (blt_nat 2 4) = true.
-(* FILL IN HERE *) Admitted.
+exact GIVEUP. Qed.
 Example test_blt_nat3:             (blt_nat 4 2) = false.
-(* FILL IN HERE *) Admitted.
+exact GIVEUP. Qed.
 (** [] *)

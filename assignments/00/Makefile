@@ -1,13 +1,14 @@
+DFILES = D.v
 PFILES = $(shell find P??.v)
 EFILES = $(shell find E??.v)
 
 POFILES = $(patsubst %.v,%.vo,$(PFILES))
 EOFILES = $(patsubst %.v,%.vo,$(EFILES))
 
-all: $(PFILES) Makefile.coq
+all: $(DFILES) $(PFILES) Makefile.coq
 	$(MAKE) -f Makefile.coq $(POFILES)
 
-eval: $(PFILES) $(EFILES) Makefile.coq
+eval: $(DFILES) $(PFILES) $(EFILES) Makefile.coq
 	$(MAKE) -f Makefile.coq $(EOFILES)
 
 %.vo: Makefile.coq
@@ -19,5 +20,5 @@ clean: Makefile.coq
 
 Makefile.coq: Makefile $(PFILES) $(EFILES)
 	(echo "-I ."; \
-         echo $(PFILES) $(EFILES)) > _CoqProject
+         echo $(DFILES) $(PFILES) $(EFILES)) > _CoqProject
 	coq_makefile -f _CoqProject -o Makefile.coq
