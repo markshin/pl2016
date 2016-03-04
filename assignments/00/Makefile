@@ -4,10 +4,10 @@ EFILES = $(shell find E??.v)
 POFILES = $(patsubst %.v,%.vo,$(PFILES))
 EOFILES = $(patsubst %.v,%.vo,$(EFILES))
 
-pfiles: $(PFILES) Makefile.coq
+all: $(PFILES) Makefile.coq
 	$(MAKE) -f Makefile.coq $(POFILES)
 
-efiles: $(PFILES) $(EFILES) Makefile.coq
+eval: $(PFILES) $(EFILES) Makefile.coq
 	$(MAKE) -f Makefile.coq $(EOFILES)
 
 %.vo: Makefile.coq
