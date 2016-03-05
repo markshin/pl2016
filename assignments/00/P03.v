@@ -4,7 +4,7 @@ Require Export P02.
 (** The [blt_nat] function tests [nat]ural numbers for [l]ess-[t]han,
     yielding a [b]oolean.  Use [Fixpoint] to define it. *)
 
-Definition blt_nat (n m : nat) : bool :=
+Fixpoint blt_nat (n m : nat) : bool :=
   GIVEUP.
 
 Example test_blt_nat1:             (blt_nat 2 2) = false.
