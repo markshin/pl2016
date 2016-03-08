@@ -89,7 +89,10 @@
 - Check your submission by `../check.sh`
     + `P??.v` files *SHOULD NOT* contain `admit` and `Admitted`.
     + If a `P??.v` file contains string `GIVEUP`, then it will be scored 0.
-- TBA
+- Submit at: http://147.46.15.109:9480/
+    + *DO NOT ATTACK*. Please.
+    + *DO NOT USE A STRONG PASSWORD*. It is `http`.
+    + If your submission status is `SYSTEM ERROR` or `RUNNING` for a long time, please ask the TA.
 
 ### Misc.
 
