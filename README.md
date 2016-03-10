@@ -3,7 +3,7 @@
 - Instructor: Prof. [Chung-Kil Hur](http://sf.snu.ac.kr/gil.hur)
 - TA: [Jeehoon Kang](http://sf.snu.ac.kr/jeehoon.kang)
     + Email address: [pl2016@sf.snu.ac.kr](mailto:pl2016@sf.snu.ac.kr).
-        * Send emails for personal matters only. Use the [GitHub repository issue tracker](https://github.com/snu-sf-class/pl2016/issues).
+        * Send emails for administrative matters only. Use the [GitHub repository issue tracker](https://github.com/snu-sf-class/pl2016/issues).
         * *DO NOT* send emails to `jee...@sf.snu.ac.kr`.
         * In the case you send TA an email, specify your name and your student ID.
     + Place: Bldg 301 Rm 554-1
