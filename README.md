@@ -5,7 +5,7 @@
     + Email address: [pl2016@sf.snu.ac.kr](mailto:pl2016@sf.snu.ac.kr).
         * Send emails for administrative matters only. Use the [GitHub repository issue tracker](https://github.com/snu-sf-class/pl2016/issues).
         * *DO NOT* send emails to `jee...@sf.snu.ac.kr`.
-        * In the case you send TA an email, specify your name and your student ID.
+        * In the case of sending TA an email, specify sender's name and student ID.
     + Place: Bldg 301 Rm 554-1
     + Office Hour: Please email me to make an appointment.
 
