@@ -86,9 +86,11 @@
 - Edit `P??.v` files to do the assignment.
 - `make` to compile your submission.  `make eval` to grade your submission yourself. 
 - Both `make` and `make eval` *SHOULD SUCCEED*. If not, your score will be 0.
-- Check your submission by `../check.sh`
-    + `P??.v` files *SHOULD NOT* contain `admit` and `Admitted`.
+- `make eval` will check your submission.
+    + `P??.v` files *SHOULD NOT* contain `admit`, `Admitted`, and anything in `forbidden.txt`.
     + If a `P??.v` file contains string `GIVEUP`, then it will be scored 0.
+- `make submission` to prepare your submission.
+    + `zip` should be installed. Otherwise, you can just zip `P??.v`.
 - Submit at: http://147.46.15.109:9480/
     + *DO NOT ATTACK*. Please.
     + *DO NOT USE A STRONG PASSWORD*. It is `http`.
