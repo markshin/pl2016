@@ -16,9 +16,9 @@
 ## Assignments
 
 | Due        	| Due (Delay)	| Description                   	 	 	 	 	 	 	 	 	 	 	 	 	 	| Points 	|
-|------------	|-----------------------------------------------------------------------------------	|-------	|
+|------------	|------------	|-----------------------------------------------------------------------------------	|-------	|
 | 20160320 23:59| 20160610 23:59| [Assignment 01](https://github.com/snu-sf-class/pl2016/tree/master/assignments/01)    | 70		|
-| NO			| [Assignment 00](https://github.com/snu-sf-class/pl2016/tree/master/assignments/00)    | No scores	|
+| NO			| NO			| [Assignment 00](https://github.com/snu-sf-class/pl2016/tree/master/assignments/00)    | No scores	|
 
 ## Must Read
 
