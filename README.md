@@ -97,7 +97,7 @@
 - Submit at: http://147.46.15.109:9480/
     + *DO NOT ATTACK*. Please.
     + *DO NOT USE A STRONG PASSWORD*. It is `http`.
-    + If your submission status is `SYSTEM ERROR` or `RUNNING` for a long time, please ask the TA.
+    + If your submission status is `SYSTEM ERROR` or `RUNNING` for a long time, even after refreshing your web browser for several times, please ask the TA.
 
 ### Misc.
 
