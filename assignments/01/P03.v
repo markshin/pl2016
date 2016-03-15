@@ -6,13 +6,18 @@ Require Export D.
 (** The [blt_nat] function tests [nat]ural numbers for [l]ess-[t]han,
     yielding a [b]oolean.  Use [Fixpoint] to define it. *)
 
-Definition blt_nat (n m : nat) : bool :=
-  GIVEUP.
+Fixpoint blt_nat (n m : nat) : bool :=
+  match n, m with
+  | 0, 0 => false
+  | 0, S m' => true
+  | S n', S m' => blt_nat n' m'
+  | S n', 0 => false
+  end.
 
 Example test_blt_nat1:             (blt_nat 2 2) = false.
-Proof. exact GIVEUP. Qed.
+Proof. reflexivity. Qed.
 Example test_blt_nat2:             (blt_nat 2 4) = true.
-Proof. exact GIVEUP. Qed.
+Proof. reflexivity. Qed.
 Example test_blt_nat3:             (blt_nat 4 2) = false.
-Proof. exact GIVEUP. Qed.
+Proof. reflexivity. Qed.
 

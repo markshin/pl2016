@@ -9,6 +9,9 @@ Require Export D.
 Theorem zero_nbeq_plus_1 : forall n : nat,
   beq_nat 0 (n + 1) = false.
 Proof.
-  exact GIVEUP.
+ intros.
+ destruct n as [ | n'].
+ simpl. reflexivity.
+ simpl. reflexivity. 
 Qed.
 

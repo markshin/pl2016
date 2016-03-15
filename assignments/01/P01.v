@@ -8,14 +8,14 @@ Require Export D.
     otherwise. *)
 
 Definition andb3 (b1:bool) (b2:bool) (b3:bool) : bool :=
-  GIVEUP.
+  andb b1 (andb b2 b3).
 
 Example test_andb31:                 (andb3 true true true) = true.
-Proof. exact GIVEUP. Qed.
+Proof. reflexivity. Qed.
 Example test_andb32:                 (andb3 false true true) = false.
-Proof. exact GIVEUP. Qed.
+Proof. reflexivity. Qed.
 Example test_andb33:                 (andb3 true false true) = false.
-Proof. exact GIVEUP. Qed.
+Proof. reflexivity. Qed.
 Example test_andb34:                 (andb3 true true false) = false.
-Proof. exact GIVEUP. Qed.
+Proof. reflexivity. Qed.
 
