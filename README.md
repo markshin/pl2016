@@ -15,9 +15,9 @@
 
 ## Assignments
 
-| Due        	| Description                   	 	 	 	 	 	 	 	 	 	 	 	 	 	| Notes 	|
+| Due        	| Due (Delay)	| Description                   	 	 	 	 	 	 	 	 	 	 	 	 	 	| Points 	|
 |------------	|-----------------------------------------------------------------------------------	|-------	|
-| 20160320 23:59| [Assignment 01](https://github.com/snu-sf-class/pl2016/tree/master/assignments/01)    | 70		|
+| 20160320 23:59| 20160610 23:59| [Assignment 01](https://github.com/snu-sf-class/pl2016/tree/master/assignments/01)    | 70		|
 | NO			| [Assignment 00](https://github.com/snu-sf-class/pl2016/tree/master/assignments/00)    | No scores	|
 
 ## Must Read
@@ -70,6 +70,9 @@
 - *DO NOT DOWNLOAD* the textbook from [The official Software Foundation website](https://www.cis.upenn.edu/~bcpierce/sf/current/index.html) in order to keep in sync.
 
 ### Assignment
+
+- Assignments will be issued every Thursday.  The deadline is the next Sunday (10 days later).  The deadline for the delayed submission is the next to the next Sunday (17 days later).
+    + Exception: The delayed submission for the Assignment 01 will be accepted until the end of the semester.
 
 #### Honor Code: *DO NOT CHEAT*
 
