@@ -5,12 +5,17 @@ Require Export P02.
     yielding a [b]oolean.  Use [Fixpoint] to define it. *)
 
 Fixpoint blt_nat (n m : nat) : bool :=
-  GIVEUP.
+  match n, m with
+  | 0, 0 => false
+  | 0, S m' => true
+  | S n', S m' => blt_nat n' m'
+  | S n', 0 => false
+  end.
 
 Example test_blt_nat1:             (blt_nat 2 2) = false.
-exact GIVEUP. Qed.
+Proof. reflexivity. Qed.
 Example test_blt_nat2:             (blt_nat 2 4) = true.
-exact GIVEUP. Qed.
+Proof. reflexivity. Qed.
 Example test_blt_nat3:             (blt_nat 4 2) = false.
-exact GIVEUP. Qed.
+Proof. reflexivity. Qed.
 (** [] *)
