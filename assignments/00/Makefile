@@ -10,7 +10,7 @@ all: $(DFILES) $(PFILES) Makefile.coq
 
 eval: $(DFILES) $(PFILES) $(EFILES) Makefile.coq
 	$(MAKE) -f Makefile.coq $(EOFILES)
-	./check.sh
+	sh ./check.sh
 
 submission: eval
 	zip submission.zip P??.v
