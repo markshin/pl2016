@@ -9,7 +9,7 @@ all: $(DFILES) $(PFILES) Makefile.coq
 	$(MAKE) -f Makefile.coq $(POFILES)
 
 check:
-	sh ./check.sh
+	bash ./check.sh
 
 eval: $(DFILES) $(PFILES) $(EFILES) Makefile.coq check
 	$(MAKE) -f Makefile.coq $(EOFILES)
