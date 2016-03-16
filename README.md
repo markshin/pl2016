@@ -63,6 +63,23 @@
     + CoqIDE: Download those bundled with CoqIDE in the [Download page](https://coq.inria.fr/coq-84).
     + Emacs: [Company-Coq](https://github.com/cpitclaudel/company-coq). Follow the setup instructions.
 
+- Install Cygwin in Windows.
+    + If you use Unix-like OS, just ignore it.
+    + Download [Cygwin](https://cygwin.com/install.html).  *CAUTION*: choose 32- or 64-bit versions correctly.
+    + Install Cygwin. Make sure that you install `bash` and `make` (in Select packages). Installation may take a long time.
+    + Now by "terminal" I mean the Cygwin terminal.
+
+- Add the directory that contains Coq binaries in the `PATH` variable.
+    + Edit your Shell init file (like `~/.bashrc`).
+        * For Cygwin, find the file in `C:\cygwin\home\[USER_ID]`.
+    + Add `export PATH=$PATH:[THE_DIRECTORY_CONTAINS_COQ]` at the end of the file.
+    + Check `which coqc` in the terminal. It should point to the `coqc` binary.
+        * Restart the terminal to apply `~/.bashrc`.
+    + For Windows, the directory is highly likely ` /cygdrive/c/Program\ Files\ \(x86\)/Coq/bin/`.
+        * NOTE: DO NOT USE `C:\Program Files (x86)\Coq\bin`. In Cygwin, `C:` is recognized as `/cygdrive/c`.
+    + For OS X, the directory is highly likely `/Applications/CoqIDE_8.4pl5.app/Contents/Resources/bin/`.
+    + For Linux, `PATH` may already contain the directory. Check by `which coqc`.
+
 ### Textbook: Software Foundations
 
 - The textbook is in this repository's `sf/` directory.
@@ -85,9 +102,9 @@
     + You submit `P??.v` files.  You should edit only `P??.v`. *DO NOT TOUCH ANYTHING ELSE*.
     + `E??.v` files are for evaluation.
     + Everything else are for relevant the definitions for the assignment.
-- `make` to compile files so that IDE can understand them.
+- `make` in the terminal to compile files so that IDE can understand them.
 - Edit `P??.v` files to do the assignment.
-- `make` to compile your submission.  `make eval` to grade your submission yourself. 
+- `make` in the terminal to compile your submission.  `make eval` in the terminal to grade your submission yourself. 
 - Both `make` and `make eval` *SHOULD SUCCEED*. If not, your score will be 0.
 - `make eval` will check your submission.
     + `P??.v` files *SHOULD NOT* contain `admit`, `Admitted`, and anything in `forbidden.txt`.
