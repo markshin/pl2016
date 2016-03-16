@@ -73,6 +73,7 @@
 
 - Assignments will be issued every Thursday.  The deadline is the next Sunday (10 days later).  The deadline for the delayed submission is the next to the next Sunday (17 days later).
     + Exception: The delayed submission for the Assignment 01 will be accepted until the end of the semester.
+- You may have to `make` before interacting with IDEs.
 
 #### Honor Code: *DO NOT CHEAT*
 
