@@ -61,7 +61,6 @@
 
 - Use IDEs supporting Coq.
     + CoqIDE: Download those bundled with CoqIDE in the [Download page](https://coq.inria.fr/coq-84).
-        * In OS X, at first run, you may see an error message saying "Failed to load coqtop." Then click "No", and then find `/Applications/CoqIDE_8.4pl5.app/Contents/Resources/bin/coqtop` and open for once. Then goto `CoqIDE` > `Preferences` > `Externals`. And then change `coqtop` into `/Applications/CoqIDE_8.4pl5.app/Contents/Resources/bin/coqtop`.
     + Emacs: [Company-Coq](https://github.com/cpitclaudel/company-coq). Follow the setup instructions.
 
 ### Textbook: Software Foundations
@@ -73,7 +72,6 @@
 
 - Assignments will be issued every Thursday.  The deadline is the next Sunday (10 days later).  The deadline for the delayed submission is the next to the next Sunday (17 days later).
     + Exception: The delayed submission for the Assignment 01 will be accepted until the end of the semester.
-- You may have to `make` before interacting with IDEs.
 
 #### Honor Code: *DO NOT CHEAT*
 
@@ -87,6 +85,7 @@
     + You submit `P??.v` files.  You should edit only `P??.v`. *DO NOT TOUCH ANYTHING ELSE*.
     + `E??.v` files are for evaluation.
     + Everything else are for relevant the definitions for the assignment.
+- `make` to compile files so that IDE can understand them.
 - Edit `P??.v` files to do the assignment.
 - `make` to compile your submission.  `make eval` to grade your submission yourself. 
 - Both `make` and `make eval` *SHOULD SUCCEED*. If not, your score will be 0.
@@ -99,6 +98,13 @@
     + *DO NOT ATTACK*. Please.
     + *DO NOT USE A STRONG PASSWORD*. It is `http`.
     + If your submission status is `SYSTEM ERROR` or `RUNNING` for a long time, even after refreshing your web browser for several times, please ask the TA.
+
+### Troubleshootings
+
+- If something bad happens, please download the most recent version of the assignments.
+- You may have to `make` before interacting with IDEs.
+- You can specify the CRLF handling strategy in Git ([cf](http://stackoverflow.com/questions/170961/whats-the-best-crlf-carriage-return-line-feed-handling-strategy-with-git)). In Windows, some strategies may break the Makefile. Please just use the linebreaks as in the repository.
+- When running CoqIDE in OS X for the first time, you may see an error message saying `Failed to load coqtop.` Then click `No`, and then find `/Applications/CoqIDE_8.4pl5.app/Contents/Resources/bin/coqtop` and open for once. Then goto `CoqIDE` > `Preferences` > `Externals`. And then change `coqtop` into `/Applications/CoqIDE_8.4pl5.app/Contents/Resources/bin/coqtop`.
 
 ### Misc.
 
