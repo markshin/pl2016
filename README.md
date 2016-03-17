@@ -7,7 +7,7 @@
         * *DO NOT* send emails to `jee...@sf.snu.ac.kr`.
         * In the case of sending TA an email, specify sender's name and student ID.
     + Place: Bldg 301 Rm 554-1
-    + Office Hour: Please email me to make an appointment.
+    + Office Hour: Thursday 18:15-19:00.  In the case of needing an extra time, please email me to make an appointment.
 
 ## Announcements
 
