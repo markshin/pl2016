@@ -17,6 +17,7 @@
 
 | Due        	| Description                   	 	 	 	 	 	 	 	 	 	 	 	 	 	| Notes 	|
 |------------	|-----------------------------------------------------------------------------------	|-------	|
+| 20160327 23:59| [Assignment 02](https://github.com/snu-sf-class/pl2016/tree/master/assignments/02)    | 100		|
 | 20160320 23:59| [Assignment 01](https://github.com/snu-sf-class/pl2016/tree/master/assignments/01)    | 70		|
 | NO			| [Assignment 00](https://github.com/snu-sf-class/pl2016/tree/master/assignments/00)    | No scores	|
 
