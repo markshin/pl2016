@@ -2,7 +2,7 @@ Require Export D.
 
 
 
-(** **** Problem  : 4 stars (mult_comm) *)
+(** **** Problem  : 4 stars (plus_swap) *)
 (** Use [assert] to help prove this theorem if necessary.  
     You shouldn't need to use induction. *)
 
