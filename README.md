@@ -7,7 +7,7 @@
         * *DO NOT* send emails to `jee...@sf.snu.ac.kr`.
         * In the case of sending TA an email, specify sender's name and student ID.
     + Place: Bldg 301 Rm 554-1
-    + Office Hour: Please email me to make an appointment.
+    + Office Hour: Thursday 18:15-19:00.  In the case of needing an extra time, please email me to make an appointment.
 
 ## Announcements
 
@@ -15,10 +15,11 @@
 
 ## Assignments
 
-| Due        	| Description                   	 	 	 	 	 	 	 	 	 	 	 	 	 	| Notes 	|
-|------------	|-----------------------------------------------------------------------------------	|-------	|
-| 20160320 23:59| [Assignment 01](https://github.com/snu-sf-class/pl2016/tree/master/assignments/01)    | 70		|
-| NO			| [Assignment 00](https://github.com/snu-sf-class/pl2016/tree/master/assignments/00)    | No scores	|
+| Due        	| Due (Delay)	| Description                   	 	 	 	 	 	 	 	 	 	 	 	 	 	| Points 	|
+|------------	|------------	|-----------------------------------------------------------------------------------	|-------	|
+| 20160327 23:59| 20160403 23:59| [Assignment 02](https://github.com/snu-sf-class/pl2016/tree/master/assignments/02)    | 100		|
+| 20160320 23:59| 20160610 23:59| [Assignment 01](https://github.com/snu-sf-class/pl2016/tree/master/assignments/01)    | 70		|
+| NO			| NO			| [Assignment 00](https://github.com/snu-sf-class/pl2016/tree/master/assignments/00)    | No scores	|
 
 ## Must Read
 
@@ -61,8 +62,24 @@
 
 - Use IDEs supporting Coq.
     + CoqIDE: Download those bundled with CoqIDE in the [Download page](https://coq.inria.fr/coq-84).
-        * In OS X, at first run, you may see an error message saying "Failed to load coqtop." Then click "No", and then find `/Applications/CoqIDE_8.4pl5.app/Contents/Resources/bin/coqtop` and open for once. Then goto `CoqIDE` > `Preferences` > `Externals`. And then change `coqtop` into `/Applications/CoqIDE_8.4pl5.app/Contents/Resources/bin/coqtop`.
     + Emacs: [Company-Coq](https://github.com/cpitclaudel/company-coq). Follow the setup instructions.
+
+- Install Cygwin in Windows.
+    + If you use Unix-like OS, just ignore it.
+    + Download [Cygwin](https://cygwin.com/install.html).  *CAUTION*: choose 32- or 64-bit versions correctly.
+    + Install Cygwin. Make sure that you install `bash` and `make` (in Select packages). Installation may take a long time.
+    + Now by "terminal" I mean the Cygwin terminal.
+
+- Add the directory that contains Coq binaries in the `PATH` variable.
+    + Edit your Shell init file (like `~/.bashrc`).
+        * For Cygwin, find the file in `C:\cygwin\home\[USER_ID]`.
+    + Add `export PATH=$PATH:[THE_DIRECTORY_CONTAINS_COQ]` at the end of the file.
+    + Check `which coqc` in the terminal. It should point to the `coqc` binary.
+        * Restart the terminal to apply `~/.bashrc`.
+    + For Windows, the directory is highly likely ` /cygdrive/c/Program\ Files\ \(x86\)/Coq/bin/`.
+        * NOTE: DO NOT USE `C:\Program Files (x86)\Coq\bin`. In Cygwin, `C:` is recognized as `/cygdrive/c`.
+    + For OS X, the directory is highly likely `/Applications/CoqIDE_8.4pl5.app/Contents/Resources/bin/`.
+    + For Linux, `PATH` may already contain the directory. Check by `which coqc`.
 
 ### Textbook: Software Foundations
 
@@ -70,6 +87,9 @@
 - *DO NOT DOWNLOAD* the textbook from [The official Software Foundation website](https://www.cis.upenn.edu/~bcpierce/sf/current/index.html) in order to keep in sync.
 
 ### Assignment
+
+- Assignments will be issued every Thursday.  The deadline is the next Sunday (10 days later).  The deadline for the delayed submission is the next to the next Sunday (17 days later).
+    + Exception: The delayed submission for the Assignment 01 will be accepted until the end of the semester.
 
 #### Honor Code: *DO NOT CHEAT*
 
@@ -83,8 +103,9 @@
     + You submit `P??.v` files.  You should edit only `P??.v`. *DO NOT TOUCH ANYTHING ELSE*.
     + `E??.v` files are for evaluation.
     + Everything else are for relevant the definitions for the assignment.
+- `make` in the terminal to compile files so that IDE can understand them.
 - Edit `P??.v` files to do the assignment.
-- `make` to compile your submission.  `make eval` to grade your submission yourself. 
+- `make` in the terminal to compile your submission.  `make eval` in the terminal to grade your submission yourself. 
 - Both `make` and `make eval` *SHOULD SUCCEED*. If not, your score will be 0.
 - `make eval` will check your submission.
     + `P??.v` files *SHOULD NOT* contain `admit`, `Admitted`, and anything in `forbidden.txt`.
@@ -94,7 +115,15 @@
 - Submit at: http://147.46.15.109:9480/
     + *DO NOT ATTACK*. Please.
     + *DO NOT USE A STRONG PASSWORD*. It is `http`.
-    + If your submission status is `SYSTEM ERROR` or `RUNNING` for a long time, please ask the TA.
+    + If your submission status is `SYSTEM ERROR` or `RUNNING` for a long time, even after refreshing your web browser for several times, please ask the TA.
+
+### Troubleshootings
+
+- If something bad happens, please download the most recent version of the assignments.
+- You may have to `make` before interacting with IDEs.
+- You can specify the CRLF handling strategy in Git ([cf](http://stackoverflow.com/questions/170961/whats-the-best-crlf-carriage-return-line-feed-handling-strategy-with-git)). In Windows, some strategies may break the Makefile. Please just use the linebreaks as in the repository.
+- When running CoqIDE in OS X for the first time, you may see an error message saying `Failed to load coqtop.` Then click `No`, and then find `/Applications/CoqIDE_8.4pl5.app/Contents/Resources/bin/coqtop` and open for once. Then goto `CoqIDE` > `Preferences` > `Externals`. And then change `coqtop` into `/Applications/CoqIDE_8.4pl5.app/Contents/Resources/bin/coqtop`.
+- Your submission file should have alphanumeric characters only (#30).
 
 ### Misc.
 
