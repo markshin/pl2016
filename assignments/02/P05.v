@@ -10,6 +10,11 @@ Require Export D.
 
 Lemma double_plus : forall n, double n = n + n .
 Proof.  
-  exact GIVEUP.
+  intros. 
+  induction n as [ | n'].
+  simpl. reflexivity.
+  simpl. rewrite <- plus_n_Sm.
+  rewrite -> IHn'.
+  reflexivity.
 Qed.
 
