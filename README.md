@@ -71,7 +71,7 @@
     + Now by "terminal" I mean the Cygwin terminal.
 
 - Add the directory that contains Coq binaries in the `PATH` variable.
-    + Edit your Shell init file (like `~/.bashrc`).
+    + Edit your Shell init file (like `~/.bashrc` or `~/.bash_profile`).
         * For Cygwin, find the file in `C:\cygwin\home\[USER_ID]`.
     + Add `export PATH=$PATH:[THE_DIRECTORY_CONTAINS_COQ]` at the end of the file.
     + Check `which coqc` in the terminal. It should point to the `coqc` binary.
