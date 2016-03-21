@@ -96,6 +96,7 @@
 - If you copy others' source code, you will get F.
 - "Others' source code" includes other students' and resources around the web. Especially, do not consult with public repositories on software foundations.
 - Note that we have a good automatic clone detector. I found out that a lot of students cheated last time. I hope we all be happy at the end of the semester..
+- The maximum score of a delayed submission is 80% that of a regular submission.
 
 #### Submission
 
