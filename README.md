@@ -72,7 +72,7 @@
     + Now by "terminal" I mean the Cygwin terminal.
 
 - Add the directory that contains Coq binaries in the `PATH` variable.
-    + Edit your Shell init file (like `~/.bashrc`).
+    + Edit your Shell init file (like `~/.bashrc` or `~/.bash_profile`).
         * For Cygwin, find the file in `C:\cygwin\home\[USER_ID]`.
     + Add `export PATH=$PATH:[THE_DIRECTORY_CONTAINS_COQ]` at the end of the file.
     + Check `which coqc` in the terminal. It should point to the `coqc` binary.
@@ -97,6 +97,7 @@
 - If you copy others' source code, you will get F.
 - "Others' source code" includes other students' and resources around the web. Especially, do not consult with public repositories on software foundations.
 - Note that we have a good automatic clone detector. I found out that a lot of students cheated last time. I hope we all be happy at the end of the semester..
+- The maximum score of a delayed submission is 80% that of a regular submission.
 
 #### Submission
 
