@@ -14,7 +14,7 @@ check:
 eval: $(DFILES) $(PFILES) $(EFILES) Makefile.coq check
 	$(MAKE) -f Makefile.coq $(EOFILES)
 
-submission: eval
+submission:
 	zip submission.zip P??.v
 
 %.vo: Makefile.coq
