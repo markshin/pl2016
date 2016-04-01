@@ -98,6 +98,7 @@
 - "Others' source code" includes other students' and resources around the web. Especially, do not consult with public repositories on software foundations.
 - Note that we have a good automatic clone detector. I found out that a lot of students cheated last time. I hope we all be happy at the end of the semester..
 - The maximum score of a delayed submission is 80% that of a regular submission.
+    + The granularity the delayed submission is per-problem. So even if you couldn't get the full score for the regular submission, try to solve the remaining problems and submit them.
 
 #### Submission
 
