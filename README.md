@@ -131,6 +131,23 @@
 - If cygwin complains like `./check.sh: line 2: $'\r': command not found`, please:
     + Install `dos2unix` in Cygwin.
     + Run: `dos2unix check.sh`
+- If you use Coquille (on Vim) and your terminal is hidden by some message (`warning (some rule has been masked)`), please edit `~/.vim/.../coquille/autoload/coquille.py`'s `restart_coq` as follows (NOTE: `stderr = subprocess.PIPE`):
+
+        def restart_coq(*args):
+        global coqtop
+        if coqtop: kill_coqtop()
+        try:
+            coqtop = subprocess.Popen(
+                    ["coqtop", "-ideslave"] + list(args),
+                    stdin = subprocess.PIPE,
+                    stdout = subprocess.PIPE,
+                    stderr = subprocess.PIPE,
+                    preexec_fn = ignore_sigint
+                    )
+        except OSError:
+            print("Error: couldn't launch coqtop")
+
+  Thank you for reporting, @indiofish
 
 ### Misc.
 
