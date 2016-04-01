@@ -12,6 +12,7 @@
 ## Announcements
 
 - There will be a lab session on 2016/03/08 (Tue).
+- March 22's lecture is related to: https://github.com/snu-sf-class/pl2016/blob/master/sf/MoreInd.v
 
 ## Assignments
 
@@ -98,7 +99,7 @@
 - "Others' source code" includes other students' and resources around the web. Especially, do not consult with public repositories on software foundations.
 - Note that we have a good automatic clone detector. I found out that a lot of students cheated last time. I hope we all be happy at the end of the semester..
 - The maximum score of a delayed submission is 80% that of a regular submission.
-    + The granularity the delayed submission is per-problem. So even if you couldn't get the full score for the regular submission, try to solve the remaining problems and submit them.
+    + The granularity the delayed submission is per-problem, not per-assignment. So even if you couldn't get the full score for the regular submission period, try to solve the remaining problems and submit them.
 
 #### Submission
 
