@@ -12,11 +12,13 @@
 ## Announcements
 
 - There will be a lab session on 2016/03/08 (Tue).
+- March 22's lecture is related to: https://github.com/snu-sf-class/pl2016/blob/master/sf/MoreInd.v
 
 ## Assignments
 
 | Due        	| Due (Delay)	| Description                   	 	 	 	 	 	 	 	 	 	 	 	 	 	| Points 	|
 |------------	|------------	|-----------------------------------------------------------------------------------	|-------	|
+| 20160403 23:59| 20160410 23:59| [Assignment 03](https://github.com/snu-sf-class/pl2016/tree/master/assignments/03)    | 130		|
 | 20160327 23:59| 20160403 23:59| [Assignment 02](https://github.com/snu-sf-class/pl2016/tree/master/assignments/02)    | 100		|
 | 20160320 23:59| 20160610 23:59| [Assignment 01](https://github.com/snu-sf-class/pl2016/tree/master/assignments/01)    | 70		|
 | NO			| NO			| [Assignment 00](https://github.com/snu-sf-class/pl2016/tree/master/assignments/00)    | No scores	|
@@ -71,7 +73,7 @@
     + Now by "terminal" I mean the Cygwin terminal.
 
 - Add the directory that contains Coq binaries in the `PATH` variable.
-    + Edit your Shell init file (like `~/.bashrc`).
+    + Edit your Shell init file (like `~/.bashrc` or `~/.bash_profile`).
         * For Cygwin, find the file in `C:\cygwin\home\[USER_ID]`.
     + Add `export PATH=$PATH:[THE_DIRECTORY_CONTAINS_COQ]` at the end of the file.
     + Check `which coqc` in the terminal. It should point to the `coqc` binary.
@@ -96,6 +98,8 @@
 - If you copy others' source code, you will get F.
 - "Others' source code" includes other students' and resources around the web. Especially, do not consult with public repositories on software foundations.
 - Note that we have a good automatic clone detector. I found out that a lot of students cheated last time. I hope we all be happy at the end of the semester..
+- The maximum score of a delayed submission is 80% that of a regular submission.
+    + The granularity the delayed submission is per-problem, not per-assignment. So even if you couldn't get the full score for the regular submission period, try to solve the remaining problems and submit them.
 
 #### Submission
 
@@ -124,6 +128,26 @@
 - You can specify the CRLF handling strategy in Git ([cf](http://stackoverflow.com/questions/170961/whats-the-best-crlf-carriage-return-line-feed-handling-strategy-with-git)). In Windows, some strategies may break the Makefile. Please just use the linebreaks as in the repository.
 - When running CoqIDE in OS X for the first time, you may see an error message saying `Failed to load coqtop.` Then click `No`, and then find `/Applications/CoqIDE_8.4pl5.app/Contents/Resources/bin/coqtop` and open for once. Then goto `CoqIDE` > `Preferences` > `Externals`. And then change `coqtop` into `/Applications/CoqIDE_8.4pl5.app/Contents/Resources/bin/coqtop`.
 - Your submission file should have alphanumeric characters only (#30).
+- If cygwin complains like `./check.sh: line 2: $'\r': command not found`, please:
+    + Install `dos2unix` in Cygwin.
+    + Run: `dos2unix check.sh`
+- If you use Coquille (on Vim) and your terminal is hidden by some message (`warning (some rule has been masked)`), please edit `~/.vim/.../coquille/autoload/coquille.py`'s `restart_coq` as follows (NOTE: `stderr = subprocess.PIPE`):
+
+        def restart_coq(*args):
+        global coqtop
+        if coqtop: kill_coqtop()
+        try:
+            coqtop = subprocess.Popen(
+                    ["coqtop", "-ideslave"] + list(args),
+                    stdin = subprocess.PIPE,
+                    stdout = subprocess.PIPE,
+                    stderr = subprocess.PIPE,
+                    preexec_fn = ignore_sigint
+                    )
+        except OSError:
+            print("Error: couldn't launch coqtop")
+
+  Thank you for reporting, @indiofish
 
 ### Misc.
 
