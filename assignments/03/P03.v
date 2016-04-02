@@ -8,6 +8,10 @@ Require Export D.
 Theorem app_nil_end : forall l : natlist, 
   l ++ [] = l.   
 Proof.
-  exact GIVEUP.
+  intros. 
+  induction l as [ | l'].
+  simpl. reflexivity.
+  simpl. rewrite -> IHl.
+  reflexivity.
 Qed.  
 
