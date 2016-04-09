@@ -1,4 +1,4 @@
-DFILES = Basics.v Induction.v Lists.v MoreCoq.v Poly.v Logic.v D.v
+DFILES = Basics.v Induction.v Lists.v MoreCoq.v Poly.v D.v
 PFILES = $(shell find P??.v)
 EFILES = $(shell find E??_??.v)
 
