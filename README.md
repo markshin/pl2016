@@ -11,6 +11,7 @@
 
 ## Announcements
 
+- There will be a midterm exam on 2016/04/16 (Sat). For more detail, see: https://github.com/snu-sf-class/pl2016/issues/56
 - There will be a lab session on 2016/03/08 (Tue).
 - March 22's lecture is related to: https://github.com/snu-sf-class/pl2016/blob/master/sf/MoreInd.v
 
@@ -18,6 +19,9 @@
 
 | Due        	| Due (Delay)	| Description                   	 	 	 	 	 	 	 	 	 	 	 	 	 	| Points 	|
 |------------	|------------	|-----------------------------------------------------------------------------------	|-------	|
+| 20160424 23:59| 20160501 23:59| [Assignment 06](https://github.com/snu-sf-class/pl2016/tree/master/assignments/06)    | 300		|
+| 20160417 23:59| 20160424 23:59| [Assignment 05](https://github.com/snu-sf-class/pl2016/tree/master/assignments/05)    | 130		|
+| 20160410 23:59| 20160417 23:59| [Assignment 04](https://github.com/snu-sf-class/pl2016/tree/master/assignments/04)    | 260		|
 | 20160403 23:59| 20160410 23:59| [Assignment 03](https://github.com/snu-sf-class/pl2016/tree/master/assignments/03)    | 130		|
 | 20160327 23:59| 20160403 23:59| [Assignment 02](https://github.com/snu-sf-class/pl2016/tree/master/assignments/02)    | 100		|
 | 20160320 23:59| 20160610 23:59| [Assignment 01](https://github.com/snu-sf-class/pl2016/tree/master/assignments/01)    | 70		|
