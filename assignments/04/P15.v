@@ -12,6 +12,8 @@ Example trans_eq_exercise : forall (n m o p : nat),
      (n + p) < (minustwo o) ->
      (n + p) < m. 
 Proof.
-  exact GIVEUP.
+  intros.
+  apply trans_lt with (minustwo o).
+  apply H0. apply H.
 Qed.
 

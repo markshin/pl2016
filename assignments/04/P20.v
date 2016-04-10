@@ -6,6 +6,15 @@ Require Export D.
 Theorem beq_nat_true : forall n m,
     beq_nat n m = true -> n = m.
 Proof.
-  exact GIVEUP.
+  intros n.
+  induction  n. intros.  destruct  m.
+  reflexivity.
+  inversion H. intros.
+  destruct m.
+  inversion H.
+  simpl in H.
+  apply f_equal.
+  apply IHn.
+  apply H.
 Qed.
 

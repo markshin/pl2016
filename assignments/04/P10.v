@@ -8,6 +8,10 @@ Theorem override_neq : forall (X:Type) x1 x2 k1 k2 (f : nat->X),
   beq_nat k2 k1 = false ->
   (override f k2 x2) k1 = x1.
 Proof.
-  exact GIVEUP.
+  intros.
+  unfold override.
+  rewrite -> H0.
+  rewrite -> H.
+  reflexivity.
 Qed.
 

@@ -10,13 +10,14 @@ Require Export D.
     7. *)
 
 Definition filter_even_gt7 (l : list nat) : list nat :=
-  GIVEUP.
+  filter (fun n => andb (evenb n) (ble_nat 7 n)) l
+  .
 
 Example test_filter_even_gt7_1 :
   filter_even_gt7 [1;2;6;9;10;3;12;8] = [10;12;8].
-Proof. exact GIVEUP. Qed.
+Proof.  reflexivity. Qed.
 
 Example test_filter_even_gt7_2 :
   filter_even_gt7 [5;2;6;19;129] = [].
-Proof. exact GIVEUP. Qed.
+Proof. reflexivity. Qed.
 

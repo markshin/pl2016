@@ -12,6 +12,13 @@ Theorem double_induction: forall (P : nat -> nat -> Prop),
   (forall m n, P m n -> P (S m) (S n)) ->
   forall m n, P m n.
 Proof.
-  exact GIVEUP.
+  intros.
+  generalize dependent n.
+  induction m.
+  intros. induction n.
+  apply H. apply H1. apply IHn.
+  intros. induction n.
+  apply H0. apply IHm.
+  apply H2. apply IHm.
 Qed.
 

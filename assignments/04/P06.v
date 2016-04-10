@@ -17,10 +17,10 @@ Require Export D.
 
 Definition partition {X : Type} (test : X -> bool) (l : list X)
                      : list X * list X :=
-  GIVEUP.
+  ((filter test l), (filter (fun n => negb(test n)) l)).
 
 Example test_partition1: partition oddb [1;2;3;4;5] = ([1;3;5], [2;4]).
-Proof. exact GIVEUP. Qed.
+Proof. reflexivity. Qed.
 Example test_partition2: partition (fun x => false) [5;9;0] = ([], [5;9;0]).
-Proof. exact GIVEUP. Qed.
+Proof. reflexivity. Qed.
 

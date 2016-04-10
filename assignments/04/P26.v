@@ -10,6 +10,14 @@ Theorem filter_exercise : forall (X : Type) (test : X -> bool)
      filter test l = x :: lf ->
      test x = true.
 Proof.
-  exact GIVEUP.
+  intros.
+  generalize dependent test.
+  generalize dependent x.
+  generalize dependent lf.
+  induction l.
+  simpl. intros. inversion H.
+  simpl. intros. destruct (test x) eqn:t.
+  inversion H. rewrite <- H1. apply t.
+  apply IHl in H. apply H.
 Qed.
 

@@ -13,15 +13,25 @@ Require Export D.
 Fixpoint split
            {X Y : Type} (l : list (X*Y))
            : (list X) * (list Y) :=
-  GIVEUP.
+  match l with
+  | nil => ( [], [])
+  | (x,y) :: t => (x :: fst(split t) , y ::snd(split t))
+  end.
 
 Example test_split:
   split [(1,false);(2,false)] = ([1;2],[false;false]).
-Proof. exact GIVEUP. Qed.
+Proof. reflexivity. Qed.
 
 Theorem split_map: forall X Y (l: list (X*Y)),
    fst (split l) = map fst l.
 Proof.
-  exact GIVEUP.
+  intros.
+  induction l.
+  simpl. reflexivity.
+
+destruct x as [ a b].
+simpl. rewrite -> IHl.
+reflexivity.
 Qed.
 
+    

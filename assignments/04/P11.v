@@ -13,6 +13,11 @@ Print fold_length.
 Theorem fold_length_correct : forall X (l : list X),
   fold_length l = length l.
 Proof.
-  exact GIVEUP.
+  intros.
+  unfold fold_length.
+  induction l.
+  simpl. reflexivity.
+  simpl. rewrite -> IHl.
+  reflexivity.
 Qed.
 

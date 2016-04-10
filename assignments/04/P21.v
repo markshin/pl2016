@@ -9,6 +9,12 @@ Theorem index_after_last: forall (n : nat) (X : Type) (l : list X),
      length l = n ->
      index n l = None.
 Proof.
-  exact GIVEUP.
+  intros.
+  generalize dependent n.
+  induction l.
+  simpl. reflexivity.
+  destruct n. intros. inversion H.
+  intros. apply IHl. simpl. inversion H.
+  reflexivity.
 Qed.
 
