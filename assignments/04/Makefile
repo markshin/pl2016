@@ -1,4 +1,4 @@
-DFILES = Basics.v D.v
+DFILES = D.v Basics.v
 PFILES = $(shell find P??.v)
 EFILES = $(shell find E??_??.v)
 
