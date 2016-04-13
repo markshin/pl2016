@@ -6,6 +6,8 @@ Require Export D.
 Theorem proj2 : forall P Q : Prop, 
   P /\ Q -> Q.
 Proof.
-  exact GIVEUP.
+  intros.
+  destruct H.
+  apply H0.
 Qed.
 

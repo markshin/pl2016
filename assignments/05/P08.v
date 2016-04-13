@@ -6,6 +6,7 @@ Require Export D.
 Theorem double_neg_inf: forall (P: Prop),
   P -> ~~P.
 Proof.
-  exact GIVEUP.
+ intros.
+ unfold not. intros. apply H0. apply H. 
 Qed.
 

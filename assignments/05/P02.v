@@ -12,6 +12,7 @@ Theorem and_assoc : forall P Q R : Prop,
 Proof.
   intros P Q R H.
   destruct H as [HP [HQ HR]].
-  exact GIVEUP.
+  split. split. apply HP.
+  apply HQ. apply HR.
 Qed.
 

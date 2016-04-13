@@ -6,6 +6,11 @@ Require Export D.
 Theorem not_both_true_and_false : forall P : Prop,
   ~ (P /\ ~P).
 Proof. 
-  exact GIVEUP.
+    intros.
+    unfold not.
+    intros.
+    destruct H.
+    apply H0 in H.
+    apply H.
 Qed.
 

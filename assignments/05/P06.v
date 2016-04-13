@@ -6,6 +6,9 @@ Require Export D.
 Theorem orb_prop : forall b c,
   orb b c = true -> b = true \/ c = true.
 Proof.
-  exact GIVEUP.
+  intros. destruct b.
+  left. reflexivity.
+  destruct c. right. reflexivity.
+  inversion H.
 Qed.
 

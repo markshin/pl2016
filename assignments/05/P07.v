@@ -6,6 +6,11 @@ Require Export D.
 Theorem orb_false_elim : forall b c,
   orb b c = false -> b = false /\ c = false.
 Proof. 
-  exact GIVEUP.
+  intros.
+  destruct b.
+  inversion H.
+  destruct c.
+  inversion H.
+  split. reflexivity. reflexivity.
 Qed.
 

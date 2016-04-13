@@ -734,7 +734,7 @@ Proof.
   apply ex_falso_quodlibet.
   apply H. reflexivity.
   simpl. reflexivity.
-  intros. destruct m. simpl. reflexivity.
+  intros. destruct m. simpl.reflexivity.
   simpl. apply IHn. intros. apply H. apply f_equal. apply H0.
 Qed.
 

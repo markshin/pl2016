@@ -12,6 +12,8 @@ Require Export D.
 Theorem iff_refl : forall P : Prop, 
   P <-> P.
 Proof. 
-  exact GIVEUP.
+  intros.
+  split. intros. apply H.
+  intros. apply H.
 Qed.
 

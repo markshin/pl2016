@@ -1118,7 +1118,15 @@ Print beq_nat_true.
 Theorem beq_nat_sym : forall (n m : nat),
   beq_nat n m = beq_nat m n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n.
+  induction n.
+  intros. destruct m.
+  reflexivity. simpl. reflexivity.
+  intros. destruct m.
+  simpl. reflexivity.
+  simpl.  apply IHn.
+Qed.
+
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced, optional (beq_nat_sym_informal)  *)
@@ -1138,7 +1146,14 @@ Theorem beq_nat_trans : forall n m p,
   beq_nat m p = true ->
   beq_nat n p = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. apply beq_nat_true in H.
+  apply beq_nat_true in H0.
+  rewrite -> H0 in H. rewrite H.
+  assert (K : forall p, beq_nat p p = true).
+  intros. induction p0. simpl. reflexivity.
+   simpl. rewrite IHp0. reflexivity.
+  apply K.
+Qed.  
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced (split_combine)  *)
@@ -1169,8 +1184,15 @@ Theorem override_permute : forall (X:Type) x1 x2 k1 k2 k3 (f : nat->X),
   beq_nat k2 k1 = false ->
   (override (override f k2 x2) k1 x1) k3 = (override (override f k1 x1) k2 x2) k3.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros.
+  unfold override.
+  destruct (beq_nat k1 k3) eqn:l.
+  destruct (beq_nat k2 k3) eqn:k. apply beq_nat_true in l.
+  rewrite <- l in k. rewrite -> k in H. inversion H.
+  reflexivity. reflexivity.
+Qed.
+
+  (** [] *)
 
 (** **** Exercise: 3 stars, advanced (filter_exercise)  *)
 (** This one is a bit challenging.  Pay attention to the form of your IH. *)
