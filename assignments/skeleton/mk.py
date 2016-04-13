@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
+import os
 import sys
+import shutil
 
 DELIMITER_PROBLEM = '(*=========== 3141592 ===========*)'
 DELIMITER_CHECK = '(*-- Check --*)'
@@ -18,6 +20,17 @@ def write_file(filename, content):
         return f.write(content)
 
 if __name__ == '__main__':
+    os.system('make clean')
+    for file in os.listdir('.'):
+        if file.endswith('.v'):
+            os.remove(os.path.join(file))
+
+    requires = read_file('requires.txt')
+    write_file('Makefile', 'DFILES = D.v ' + requires + read_file('Makefile.skeleton'))
+    for require in requires.split(' '):
+        if require:
+            shutil.copy(os.path.join('../../sf', require.rstrip()), '.')
+
     filename = sys.argv[1]
     content = read_file(filename)
     problems = content.split(DELIMITER_PROBLEM)
