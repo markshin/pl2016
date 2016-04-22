@@ -19,6 +19,7 @@
 
 | Due        	| Due (Delay)	| Description                   	 	 	 	 	 	 	 	 	 	 	 	 	 	| Points 	|
 |------------	|------------	|-----------------------------------------------------------------------------------	|-------	|
+| 20160501 23:59| 20160508 23:59| [Assignment 07](https://github.com/snu-sf-class/pl2016/tree/master/assignments/07)    | 120		|
 | 20160424 23:59| 20160501 23:59| [Assignment 06](https://github.com/snu-sf-class/pl2016/tree/master/assignments/06)    | 300		|
 | 20160417 23:59| 20160424 23:59| [Assignment 05](https://github.com/snu-sf-class/pl2016/tree/master/assignments/05)    | 130		|
 | 20160410 23:59| 20160417 23:59| [Assignment 04](https://github.com/snu-sf-class/pl2016/tree/master/assignments/04)    | 260		|
