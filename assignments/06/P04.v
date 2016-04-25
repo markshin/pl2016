@@ -6,5 +6,7 @@ Require Export D.
 Theorem gorgeous_plus13: forall n, 
   gorgeous n -> gorgeous (13+n).
 Proof.
-   exact GIVEUP.
+   intros.
+   apply g_plus5. apply g_plus5. apply g_plus3.
+   apply H.
 Qed.

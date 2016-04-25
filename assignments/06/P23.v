@@ -9,5 +9,10 @@ Require Export D.
 Theorem dist_not_exists : forall (X:Type) (P : X -> Prop),
   (forall x, P x) -> ~ (exists x, ~ P x).
 Proof. 
-  exact GIVEUP.
+    intros.
+    unfold not.
+    intros.
+    induction H0.
+    apply proof.
+    apply H.
 Qed.

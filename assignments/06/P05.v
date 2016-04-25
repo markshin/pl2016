@@ -6,5 +6,9 @@ Require Export D.
 Theorem gorgeous_sum : forall n m,
   gorgeous n -> gorgeous m -> gorgeous (n + m).
 Proof.
- exact GIVEUP.
+ intros.
+ induction H.
+ simpl. apply H0.
+ apply g_plus3. apply IHgorgeous.
+ apply g_plus5. apply IHgorgeous.
 Qed.

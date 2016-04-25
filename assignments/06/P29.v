@@ -14,8 +14,10 @@ Require Export D.
     predicate in the exercise above; the sequence [1;4;1] repeats but
     does not stutter.) *)
 
-Inductive nostutter:  list nat -> Prop :=
- (* FILL IN HERE *)
+Inductive nostutter:  list nat -> Prop :=   
+| no_nil : nostutter []
+| no_one : forall n, nostutter [n]
+| no_cons : forall n1 n2 l, n1 <> n2 -> nostutter (n2 ::l ) -> nostutter (n1 ::n2 ::l)
 .
 
 (** Make sure each of these tests succeeds, but you are free
@@ -30,31 +32,20 @@ Inductive nostutter:  list nat -> Prop :=
     you prefer you can also prove each example with more basic
     tactics.  *)
 
-Example test_nostutter_1:      nostutter [3;1;4;1;5;6].
-Proof. exact GIVEUP. Qed.
-(* 
+Example test_nostutter_1:      nostutter [3;1;4;1;5;6]. 
   Proof. repeat constructor; apply beq_nat_false; auto. Qed.
-*)
 
 Example test_nostutter_2:  nostutter [].
-Proof. exact GIVEUP. Qed.
-(* 
   Proof. repeat constructor; apply beq_nat_false; auto. Qed.
-*)
+
 
 Example test_nostutter_3:  nostutter [5].
-Proof. exact GIVEUP. Qed.
-(* 
   Proof. repeat constructor; apply beq_nat_false; auto. Qed.
-*)
 
 Example test_nostutter_4:      not (nostutter [3;1;1;4]).
-Proof. exact GIVEUP. Qed.
-(* 
   Proof. intro.
   repeat match goal with 
     h: nostutter _ |- _ => inversion h; clear h; subst 
   end.
   contradiction H1; auto. Qed.
-*)
 

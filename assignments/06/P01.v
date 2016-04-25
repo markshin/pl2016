@@ -6,5 +6,9 @@ Require Export D.
 Theorem ev__even: forall n : nat,
   ev n -> even n.
 Proof.
-  exact GIVEUP.
+  intros.
+  induction H.
+  unfold even. simpl. reflexivity.
+  unfold even. unfold even in IHev.
+  simpl. apply IHev.
 Qed.

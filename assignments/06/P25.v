@@ -9,5 +9,15 @@ Require Export D.
 Theorem dist_exists_or : forall (X:Type) (P Q : X -> Prop),
   (exists x, P x \/ Q x) <-> (exists x, P x) \/ (exists x, Q x).
 Proof.
-   exact GIVEUP.
+   intros.
+   split.
+   intros.
+   destruct H.
+   destruct proof.
+   left. exists witness. apply H.
+   right. exists witness. apply H.
+   intros.
+   destruct H. destruct H.
+   exists witness. left. apply proof.
+   destruct H. exists witness. right. apply proof. 
 Qed.

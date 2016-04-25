@@ -20,21 +20,78 @@ Require Export D.
 *)
 
 Inductive pal {X: Type} : list X -> Prop :=
-(* FILL IN HERE *)
-.
+    | pal_nil : pal []
+    | pal_c1 : forall x, pal [x]
+    | pal_cc : forall x l, pal l -> pal ( x :: l ++ [x]).
+
 
 Example test_pal_1: pal [0; 1; 0].
-Proof. exact GIVEUP. Qed.
+Proof.
+    assert (K : [0 ;1;0] = 0 :: ([1] ++ [0])).
+    simpl. reflexivity.
+    rewrite K.
+    apply pal_cc. apply pal_c1.
+
+Qed.
+
+Lemma K : forall (X: Type) (l: list X) (x : X),
+    snoc l x = l ++ [x].
+Proof.
+    intros.
+    induction l.
+    simpl. reflexivity.
+    simpl. rewrite -> IHl.
+    reflexivity.
+Qed.
+
+Lemma L : forall (X : Type) (l k p : list X),
+    l ++ (k ++ p) = (l ++ k) ++ p.
+Proof.
+    intros.
+    induction l.
+    simpl. reflexivity.
+    simpl. rewrite IHl.
+    reflexivity.
+Qed.
 
 Theorem pal_app_rev: forall (X: Type) (l: list X),
   pal (l ++ rev l).
 Proof.
-  exact GIVEUP.
+  intros.
+  induction l.
+    simpl. apply pal_nil.
+    simpl. 
+    rewrite -> K.
+    rewrite -> L.
+    apply pal_cc.
+    apply IHl.
 Qed.
+
+Lemma M : forall (X : Type) (l : list X) (x : X), rev(l ++ [x]) = x :: rev l.
+Proof.
+    intros.
+    induction l. 
+    simpl. reflexivity.
+    simpl. rewrite -> IHl. rewrite -> K.
+    rewrite -> K. simpl. reflexivity.
+Qed.
+
+
 
 Theorem pal_rev: forall (X: Type) (l: list X),
   pal l -> l = rev l.
 Proof.
-  exact GIVEUP.
+  intros.
+  induction H.
+  simpl. reflexivity.
+  simpl. reflexivity. 
+    simpl. rewrite -> K. 
+    rewrite -> M. rewrite <- IHpal.
+    simpl. reflexivity. 
 Qed.
+
+
+
+
+
 

@@ -9,5 +9,8 @@ Require Export D.
 Theorem even5_nonsense : 
   ev 5 -> 2 + 2 = 9.
 Proof.
-  exact GIVEUP.
+  intros.
+  inversion H.
+  inversion pf_evn.
+    inversion pf_evn0.
 Qed.

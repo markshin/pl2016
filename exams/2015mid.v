@@ -100,7 +100,12 @@ Lemma forall_not_ex_not: forall (X: Type) (P: X -> Prop)
     (ALL: forall x, P x),
   ~ exists x, ~ P x.
 Proof.
-  admit.
+  intros.
+  unfold not.
+  intros. 
+  destruct H. 
+  apply H.
+  apply ALL.
 Qed.
 
 (*=========== 3141592 ===========*)
@@ -113,13 +118,16 @@ Qed.
  **)
 
 Fixpoint square_sum (n: nat) : nat :=
-  (* FILL IN HERE *) admit.
+  match n with
+  | 0 => 0
+  | S n => (S n * S n) + square_sum n
+  end.
 
 Example square_sum_example1: square_sum 5 = 55.
-Proof. (* FILL IN HERE *) admit. Qed.
+Proof. reflexivity. Qed.
 
 Example square_sum_example2: square_sum 10 = 385.
-Proof. (* FILL IN HERE *) admit. Qed.
+Proof. reflexivity.  Qed.
 
 (*=========== 3141592 ===========*)
 
@@ -133,13 +141,17 @@ Proof. (* FILL IN HERE *) admit. Qed.
  **)
 
 Fixpoint fibonacci (n: nat) : nat :=
-  (* FILL IN HERE *) admit.
+  match n with
+  | 0 => 0
+  | S 0 => 1
+  | S n' => fibonacci (n') + fibonacci (n'-1)
+  end.
 
 Example fibonacci_example1: fibonacci 5 = 5.
-Proof. (* FILL IN HERE *) admit. Qed.
+Proof. reflexivity. Qed.
 
 Example fibonacci_example2: fibonacci 10 = 55.
-Proof. (* FILL IN HERE *) admit. Qed.
+Proof. reflexivity. Qed.
 
 (*=========== 3141592 ===========*)
 
@@ -156,7 +168,17 @@ Fixpoint odd_sum (n: nat) : nat :=
 Theorem odd_sum__square: forall n,
   odd_sum n = n * n.
 Proof.
-  (* FILL IN HERE *) admit.
+  intros.
+  induction n. 
+  simpl. reflexivity.
+  simpl. rewrite -> IHn. 
+    apply f_equal. rewrite -> plus_comm with (n := n) (m := n +0 ).
+    rewrite -> plus_0_r.
+     rewrite <- mult_n_Sm.
+    rewrite -> plus_assoc.
+    rewrite -> plus_comm with (n := n) (m := n *n). rewrite -> plus_comm with (n := n + n) (m := n* n).
+    rewrite -> plus_assoc.
+    reflexivity.
 Qed.
 
 (*=========== 3141592 ===========*)
@@ -169,7 +191,20 @@ Lemma app_tail_cancel: forall X (l1 l2: list X) a
     (EQ: l1 ++ [a] = l2 ++ [a]),
   l1 = l2.
 Proof.
-  (* FILL IN HERE *) admit.
+    intros.
+   generalize dependent l2.
+   induction l1.
+   destruct l2.
+   intros. reflexivity.
+   intros. inversion EQ. destruct l2.
+   inversion H1. inversion H1.
+   destruct l2.
+   intros. inversion EQ. destruct l1. inversion H1.
+   inversion H1.
+   intros.
+   inversion EQ.
+   apply IHl1 in H1. rewrite  H1.
+    reflexivity.
 Qed.
 
 (*=========== 3141592 ===========*)
@@ -181,7 +216,18 @@ Qed.
 Lemma odd_or_even: forall n,
   exists k, n = 2*k \/ n = 1 + 2*k.
 Proof.
-  (* FILL IN HERE *) admit.
+  intros.
+  induction n. 
+  exists 0. 
+  left. reflexivity.
+  destruct IHn.
+  inversion H.
+  exists x.
+  right. rewrite <- H0. simpl. reflexivity.
+  exists (1+x).
+  left.
+  rewrite -> H0.
+  simpl. rewrite plus_n_Sm. reflexivity. 
 Qed.
 
 (*=========== 3141592 ===========*)
@@ -194,7 +240,21 @@ Lemma two_three_rel_prime: forall n m
     (EQ: 2 * n = 3 * m),
   exists k, m = 2 * k.
 Proof.
-  (* FILL IN HERE *) admit.
+  intros.
+
+  generalize dependent m.
+  induction n.
+  intros.
+  destruct m. 
+  exists 0. reflexivity.
+  simpl in EQ. inversion EQ.
+  intros.
+  destruct m.
+  simpl in EQ. inversion EQ.
+  
+simpl. 
+  simpl in EQ.
+admit.
 Qed.
 
 (*=========== 3141592 [30] ===========*)
@@ -206,11 +266,12 @@ Qed.
  **)
 
 Inductive sorted_min: nat -> list nat -> Prop :=
-  (* FILL IN HERE *)
-.
+    | sort_0 : forall (n : nat), sorted_min n []
+    | sort_2 : forall (n m : nat) (l : list nat), n <= m -> sorted_min n l -> sorted_min n (m :: l).
+
 
 Example sorted_min_example1: sorted_min 0 [1; 3; 4; 4; 5].
-Proof. (* FILL IN HERE *) admit. Qed.
+Proof. admit. Qed.
 
 
 Example sorted_min_example2: sorted_min 2 [2; 2; 3; 6].
@@ -236,7 +297,19 @@ Lemma sorted_not_in: forall n m l
     (LT: n < m),
   ~ appears_in n l.
 Proof.
-  (* FILL IN HERE *) admit.
+    unfold lt.
+  intros.
+  unfold not.
+  intros.
+  induction SORTED.
+  inversion H.
+  apply IHSORTED.
+  apply LT.
+  
+  intros.
+  inversion H. rewrite <- H1 in H.
+  rewrite <- H1 in SORTED.
+  apply IHl. apply SORTED.
 Qed.
 
 

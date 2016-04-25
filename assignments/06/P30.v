@@ -15,14 +15,21 @@ Require Export D.
 Lemma app_length : forall (X:Type) (l1 l2 : list X),
   length (l1 ++ l2) = length l1 + length l2. 
 Proof. 
-  exact GIVEUP.
+  intros.
+  induction l1. simpl. reflexivity.
+  simpl. rewrite IHl1. reflexivity.
 Qed.
 
 Lemma appears_in_app_split : forall (X:Type) (x:X) (l:list X),
   appears_in x l -> 
   exists l1, exists l2, l = l1 ++ (x::l2).
 Proof.
-  exact GIVEUP.
+  intros. induction H. 
+  exists []. exists l. simpl. reflexivity.
+  inversion IHappears_in. inversion proof. 
+  exists ( b :: witness). exists witness0. simpl. 
+  rewrite proof0.
+  reflexivity.
 Qed.
 
 (** Now define a predicate [repeats] (analogous to [no_repeats] in the
@@ -49,7 +56,7 @@ Theorem pigeonhole_principle: forall (X:Type) (l1  l2:list X),
    repeats l1.  
 Proof.
    intros X l1. induction l1 as [|x l1'].
-   { exact GIVEUP. }
-   { exact GIVEUP. }
+   { intros. inversion H1. }
+   { intros. exact GIVEUP. } 
 Qed.
 

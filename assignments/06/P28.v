@@ -18,12 +18,22 @@ Inductive appears_in {X:Type} (a:X) : list X -> Prop :=
 Lemma appears_in_app : forall (X:Type) (xs ys : list X) (x:X), 
      appears_in x (xs ++ ys) -> appears_in x xs \/ appears_in x ys.
 Proof.
-  exact GIVEUP.
+  intros.
+  induction xs.
+  right. simpl in H. apply H.
+  inversion H. left. apply ai_here.
+  apply IHxs in H1. inversion H1. left.
+  apply ai_later. apply H3.
+  right. apply H3.
 Qed.
 
 Lemma app_appears_in : forall (X:Type) (xs ys : list X) (x:X), 
      appears_in x xs \/ appears_in x ys -> appears_in x (xs ++ ys).
 Proof.
-  exact GIVEUP.
+  intros.
+  destruct H.
+  induction xs. inversion H. inversion H. apply ai_here.
+  simpl. apply ai_later. apply IHxs. apply H1.
+  induction xs. simpl. apply H. simpl. apply ai_later. apply IHxs.
 Qed.
 

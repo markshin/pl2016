@@ -9,6 +9,11 @@ Require Export D.
 
 Lemma le_trans : forall m n o, m <= n -> n <= o -> m <= o.
 Proof.
-  exact GIVEUP.
+  intros.
+  induction H0. 
+  apply H.
+  apply le_S. apply IHle. apply H.
+
+    
 Qed.
 

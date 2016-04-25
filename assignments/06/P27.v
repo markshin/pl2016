@@ -8,8 +8,9 @@ Require Export D.
     asserts that [P] is true for every element of the list [l]. *)
 
 Inductive all {X : Type} (P : X -> Prop) : list X -> Prop :=
-  (* FILL IN HERE *)
-.
+    | all_nil : all P []
+    | all_cons : forall x l, P x -> all P l -> all P ( x :: l) .  
+
 
 (** Recall the function [forallb], from the exercise
     [forall_exists_challenge] in chapter [Poly]: *)
@@ -24,11 +25,19 @@ Print forallb.
     are not captured by your specification? *)
 
 Example test_all_1: all (fun x => x = 1) [1; 1].
-Proof. exact GIVEUP. Qed.
+Proof. apply all_cons. reflexivity. apply all_cons. reflexivity. apply all_nil.  Qed.
 
 Theorem forallb_correct: forall X (P: X -> bool) l,
   forallb P l = true <-> all (fun x => P x = true) l.
 Proof.
-  exact GIVEUP.
+  split.
+  intros. 
+    induction l. apply all_nil. apply all_cons.
+    simpl in H. apply andb_true_elim1 in H. apply H.
+    simpl in H. apply andb_true_elim2 in H. apply IHl in H.   apply H.
+    intros.
+    induction l. simpl.  reflexivity.
+    simpl. inversion H. apply IHl in H3.
+    rewrite -> H2. rewrite -> H3. reflexivity. 
 Qed.
 
