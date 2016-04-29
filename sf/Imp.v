@@ -526,13 +526,35 @@ Proof.
     as elegant as possible. *)
 
 Fixpoint optimize_0plus_b (b : bexp) : bexp :=
-  (* FILL IN HERE *) admit.
+  match b with
+    | BTrue => b
+    | BFalse => b
+    | BEq a1 a2 => BEq (optimize_0plus (a1)) (optimize_0plus (a2))
+    | BLe a1 a2 => BLe (optimize_0plus (a1)) (optimize_0plus (a2))
+    | BNot b1 => BNot (optimize_0plus_b (b1))
+    | BAnd b1 b2 => BAnd (optimize_0plus_b (b1)) (optimize_0plus_b (b2))
+  end.
 
+Example optimize_0plus_b_example1:
+  optimize_0plus_b (BEq
+     (AMult (APlus (ANum 0) (APlus (ANum 0) (ANum 3)))
+            (AMinus (ANum 5) (APlus (ANum 0) (ANum 1))))
+     (APlus (ANum 2)
+            (APlus (ANum 0)
+                   (APlus (ANum 0) (ANum 1)))))
+  = (BEq (AMult (ANum 3) (AMinus (ANum 5) (ANum 1)))
+         (APlus (ANum 2) (ANum 1))).
+Proof. reflexivity. Qed.
 
 Theorem optimize_0plus_b_sound : forall b,
   beval (optimize_0plus_b b) = beval b.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction b;
+    try (simpl; reflexivity); 
+  try (simpl; rewrite optimize_0plus_sound'''; rewrite optimize_0plus_sound'''; reflexivity).
+  simpl.  rewrite IHb. reflexivity.
+  simpl.  rewrite IHb1. rewrite IHb2. reflexivity.
+  Qed.
 (** [] *)
 
 (** **** Exercise: 4 stars, optional (optimizer)  *)
@@ -809,10 +831,25 @@ Qed.
 (** Write a relation [bevalR] in the same style as
     [aevalR], and prove that it is equivalent to [beval].*)
 
-(* 
-Inductive bevalR:
-(* FILL IN HERE *)
-*)
+Inductive bevalR: bexp -> bool -> Prop :=
+| E_BTrue : bevalR (BTrue) true
+| E_Bfalse : bevalR (BFalse) false
+| E_BEq : forall (a1 a2 : aexp) (n1 n2 : nat), aevalR a1 n1 -> aevalR a2 n2 -> bevalR (BEq a1 a2) (beq_nat n1 n2)
+| E_BLe : forall (a1 a2 : aexp) (n1 n2 : nat), aevalR a1 n1 -> aevalR a2 n2 -> bevalR (BLe a1 a2) (ble_nat n1 n2)
+| E_BNot: forall (b1 : bexp) (b : bool), bevalR b1 b -> bevalR (BNot b1) (negb b)
+| E_BAnd: forall (b1 b2 : bexp) (bo1 bo2 : bool), bevalR b1 bo1 -> bevalR b2 bo2 -> bevalR (BAnd b1 b2) (andb bo1 bo2)
+.
+
+Theorem beval_iff_bevalR : forall b bv, bevalR b bv <-> beval b = bv.
+Proof.
+  split.
+  intros.
+  induction H; simpl in * ; try (apply aeval_iff_aevalR in H; apply aeval_iff_aevalR in H0) ; subst; reflexivity.
+
+  generalize dependent bv.
+  induction b; intros; simpl in *; subst; constructor; try(rewrite aeval_iff_aevalR); try (apply IHb); try (apply IHb1); try (apply IHb2); reflexivity.
+
+  Qed.
 (** [] *)
 End AExp.
 
@@ -947,13 +984,17 @@ Proof.
   Case "x = x". 
     reflexivity.
   Case "x <> x (impossible)". 
-    apply ex_falso_quodlibet; apply n; reflexivity. Qed.
+    apply ex_falso_quodlibet. apply n. reflexivity. Qed.
 
 (** **** Exercise: 1 star, optional (neq_id)  *)
 Lemma neq_id : forall (T:Type) x y (p q:T), x <> y -> 
                (if eq_id_dec x y then p else q) = q. 
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  destruct (eq_id_dec x y).
+  apply ex_falso_quodlibet. apply H. apply e.
+  reflexivity.
+  Qed.
 (** [] *)
 
 
@@ -972,7 +1013,7 @@ End Id.
     can represent the state as a mapping from identifiers to [nat].  
     For more complex programming languages, the state might have more 
     structure.  
-*)
+ *)
 
 Definition state := id -> nat.
 
@@ -989,7 +1030,9 @@ Definition update (st : state) (x : id) (n : nat) : state :=
 Theorem update_eq : forall n x st,
   (update st x n) x = n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  unfold update. apply eq_id.
+  Qed.  
 (** [] *)
 
 (** **** Exercise: 1 star (update_neq)  *)
@@ -997,8 +1040,10 @@ Theorem update_neq : forall x2 x1 n st,
   x2 <> x1 ->                        
   (update st x2 n) x1 = (st x1).
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros.
+  unfold update. apply neq_id. apply H.
+Qed.
+  (** [] *)
 
 (** **** Exercise: 1 star (update_example)  *)
 (** Before starting to play with tactics, make sure you understand
@@ -1007,14 +1052,17 @@ Proof.
 Theorem update_example : forall (n:nat),
   (update empty_state (Id 2) n) (Id 3) = 0.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros.
+  unfold update. apply neq_id. intros contradiction. inversion contradiction.
+Qed.
+  (** [] *)
 
 (** **** Exercise: 1 star (update_shadow)  *)
 Theorem update_shadow : forall n1 n2 x1 x2 (st : state),
    (update  (update st x2 n1) x2 n2) x1 = (update st x2 n2) x1.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. unfold update. destruct (eq_id_dec x2 x1). reflexivity. reflexivity.
+Qed.
 (** [] *)
 
 (** **** Exercise: 2 stars (update_same)  *)
@@ -1022,7 +1070,9 @@ Theorem update_same : forall n1 x1 x2 (st : state),
   st x1 = n1 ->
   (update st x1 n1) x2 = st x2.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. unfold update. destruct (eq_id_dec x1 x2). subst. reflexivity. 
+  reflexivity.
+  Qed.
 (** [] *)
 
 (** **** Exercise: 3 stars (update_permute)  *)
@@ -1030,8 +1080,12 @@ Theorem update_permute : forall n1 n2 x1 x2 x3 st,
   x2 <> x1 -> 
   (update (update st x2 n1) x1 n2) x3 = (update (update st x1 n2) x2 n1) x3.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros. unfold update. destruct (eq_id_dec x1 x3).
+  destruct (eq_id_dec x2 x3). rewrite e in H. exfalso. apply H. apply e0.
+  reflexivity.
+  destruct (eq_id_dec x2 x3). reflexivity. reflexivity.
+Qed.
+  (** [] *)
 
 (* ################################################### *)
 (** ** Syntax  *)

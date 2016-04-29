@@ -6,6 +6,7 @@ Require Export D.
 Theorem update_eq : forall n x st,
   (update st x n) x = n.
 Proof.
-  exact GIVEUP.
+  intros.
+  unfold update. apply eq_id.
 Qed.
 

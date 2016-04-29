@@ -9,6 +9,8 @@ Require Export D.
 Theorem update_example : forall (n:nat),
   (update empty_state (Id 2) n) (Id 3) = 0.
 Proof.
-  exact GIVEUP.
+
+  intros.
+  unfold update. apply neq_id. intros contradiction. inversion contradiction.
 Qed.
 
