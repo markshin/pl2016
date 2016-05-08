@@ -536,8 +536,8 @@ R47329:47333 Hoare <> bassn def
 R47348:47352 Imp <> beval def
 R47367:47371 Imp <> aeval def
 R47388:47395 Hoare <> assn_sub def
-R47423:47431 Imp <> update_eq prfax
-R47452:47461 Imp <> update_neq prfax
+R47423:47431 Imp <> update_eq thm
+R47452:47461 Imp <> update_neq thm
 R47538:47541 Coq.Init.Logic <> :type_scope:x_'/\'_x not
 R47538:47541 Coq.Init.Logic <> :type_scope:x_'/\'_x not
 R47586:47603 Coq.Bool.Bool <> not_true_iff_false thm

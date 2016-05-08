@@ -1465,7 +1465,13 @@ Example ceval_example2:
     (X ::= ANum 0;; Y ::= ANum 1;; Z ::= ANum 2) / empty_state ||
     (update (update (update empty_state X 0) Y 1) Z 2).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  apply E_Seq with (update empty_state X 0).
+  apply E_Ass. reflexivity.
+  apply E_Seq with (update (update empty_state X 0) Y 1).
+  apply E_Ass. reflexivity. 
+  apply E_Ass. reflexivity.
+Qed.
+
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced (pup_to_n)  *)
@@ -1474,15 +1480,36 @@ Proof.
    Prove that this program executes as intended for X = 2
    (this latter part is trickier than you might expect). *)
 
+
 Definition pup_to_n : com :=
-  (* FILL IN HERE *) admit.
+  Y ::= (ANum 0) ;;
+    WHILE BNot (BEq (AId X) (ANum 0)) DO
+          (Y ::= (APlus (AId Y) (AId X)) ;;
+           X ::= (AMinus (AId X) (ANum 1)))
+          END.
 
 Theorem pup_to_2_ceval :
   pup_to_n / (update empty_state X 2) ||
     update (update (update (update (update (update empty_state
       X 2) Y 0) Y 2) X 1) Y 3) X 0.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  unfold pup_to_n.
+  apply E_Seq with (update (update empty_state X 2) Y 0).
+  apply E_Ass. reflexivity.
+  apply E_WhileLoop with (update (update (update (update empty_state X 2) Y 0) Y 2) X 1).
+  simpl. reflexivity.
+  apply E_Seq with (update (update (update empty_state X 2) Y 0) Y 2).
+  apply E_Ass. simpl. reflexivity.
+  apply E_Ass. reflexivity.
+  apply E_WhileLoop with  (update (update
+           (update (update (update (update empty_state X 2) Y 0) Y 2) X 1) Y
+           3) X 0). 
+  reflexivity.
+  apply E_Seq with (update (update (update (update (update empty_state X 2) Y 0) Y 2) X 1) Y 3).
+  apply E_Ass. reflexivity.
+  apply E_Ass.  reflexivity.
+  apply E_WhileEnd. reflexivity.
+  Qed.
 (** [] *)
 
 
@@ -1581,8 +1608,11 @@ Proof.
      [loopdef] terminates.  Most of the cases are immediately
      contradictory (and so can be solved in one step with
      [inversion]). *)
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+   
+  induction contra;  inversion Heqloopdef.
+  subst. inversion H. subst. apply IHcontra2. reflexivity.
+Qed.
+  (** [] *)
 
 (** **** Exercise: 3 stars (no_whilesR)  *)
 (** Consider the definition of the [no_whiles] property below: *)
@@ -1603,7 +1633,10 @@ Fixpoint no_whiles (c : com) : bool :=
     with [no_whiles]. *)
 
 Inductive no_whilesR: com -> Prop :=
- (* FILL IN HERE *)
+| no_Skip : no_whilesR SKIP
+| no_Ass : forall x a, no_whilesR (x ::= a)
+| no_Seq: forall c1 c2, no_whilesR c1 -> no_whilesR c2 -> no_whilesR (c1 ;; c2)
+| no_If : forall b c1 c2, no_whilesR c1-> no_whilesR c2 -> no_whilesR (IFB b THEN c1 ELSE c2 FI) 
   .
 
 Theorem no_whiles_eqv:
@@ -1617,7 +1650,28 @@ Proof.
     State and prove a theorem [no_whiles_terminating] that says this. *)
 (** (Use either [no_whiles] or [no_whilesR], as you prefer.) *)
 
-(* FILL IN HERE *)
+
+
+Theorem no_whiles_terminate: forall c st (NOWHL : no_whiles c = true),
+                             exists st', c/ st || st'.
+Proof.
+  intros. generalize dependent st. 
+  induction c; intros.
+  exists st. constructor.
+  simpl in *. exists (update st i (aeval st a)). constructor. reflexivity.
+  
+  simpl in *. apply andb_true_iff in NOWHL. inversion NOWHL.
+  apply IHc1 with st in H. inversion H. apply IHc2 with x in H0. inversion H0 as [st2].
+  exists st2.  apply E_Seq with x. apply H1. apply H2. 
+
+  simpl in *. apply andb_true_iff in NOWHL. inversion NOWHL.
+  apply IHc1 with st in H. inversion H.
+  apply IHc2 with st in H0. inversion H0.
+  destruct (beval st b) eqn:B. exists x. apply E_IfTrue. apply B.
+  apply H1. exists x0.  apply E_IfFalse. apply B. apply H2. 
+  inversion NOWHL.
+Qed.
+ 
 (** [] *)
 
 (* ####################################################### *)
@@ -1683,27 +1737,58 @@ Inductive sinstr : Type :=
 Fixpoint s_execute (st : state) (stack : list nat)
                    (prog : list sinstr)
                  : list nat :=
-(* FILL IN HERE *) admit.
-
+  match prog with
+    | [] => stack
+    | inst :: prog' =>
+      match inst with
+        | SPush n => s_execute st (n :: stack) prog'
+        | SLoad x => s_execute st (st x :: stack) prog'
+        | SPlus =>
+          match stack with
+            | na :: nb :: stack' => s_execute st (nb + na :: stack') prog'
+            | _ => []
+          end
+        | SMinus =>
+          match stack with
+            | na :: nb :: stack' => s_execute st (nb - na ::stack') prog'
+            | _ => []
+          end
+        | SMult =>
+          match stack with
+            | na :: nb :: stack' => s_execute st (nb * na :: stack') prog'
+            | _ => s_execute st stack prog'
+          end
+      end
+  end.
 
 Example s_execute1 :
      s_execute empty_state []
        [SPush 5; SPush 3; SPush 1; SMinus]
    = [2; 5].
-(* FILL IN HERE *) Admitted.
+Proof.
+  simpl. reflexivity. 
+Qed.
 
 Example s_execute2 :
      s_execute (update empty_state X 3) [3;4]
        [SPush 4; SLoad X; SMult; SPlus]
    = [15; 4].
-(* FILL IN HERE *) Admitted.
+Proof.
+  simpl. reflexivity.
+  Qed.
 
 (** Next, write a function which compiles an [aexp] into a stack
     machine program. The effect of running the program should be the
     same as pushing the value of the expression on the stack. *)
 
 Fixpoint s_compile (e : aexp) : list sinstr :=
-(* FILL IN HERE *) admit.
+    match e with
+    | ANum n => [SPush n]
+    | AId i => [SLoad i]
+    | APlus a b => (s_compile a) ++ (s_compile b) ++ [SPlus]
+    | AMinus a b => (s_compile a) ++ (s_compile b) ++ [SMinus]
+    | AMult a b => (s_compile a) ++ (s_compile b) ++ [SMult]
+    end.  
 
 (** After you've defined [s_compile], prove the following to test
     that it works. *)
@@ -1711,7 +1796,10 @@ Fixpoint s_compile (e : aexp) : list sinstr :=
 Example s_compile1 :
     s_compile (AMinus (AId X) (AMult (ANum 2) (AId Y)))
   = [SLoad X; SPush 2; SLoad Y; SMult; SMinus].
-(* FILL IN HERE *) Admitted.
+Proof.
+  reflexivity.
+Qed.
+
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced (stack_compiler_correct)  *)
@@ -1729,11 +1817,31 @@ Example s_compile1 :
     theorem will then be a simple corollary of this lemma. *)
 
 
-Theorem s_compile_correct : forall (st : state) (e : aexp),
-  s_execute st [] (s_compile e) = [ aeval st e ].
+Lemma K : forall (st : state) (s : list nat) (s1 s2 : list sinstr),
+            s_execute st s (s1 ++ s2) = s_execute st (s_execute st s s1) s2. 
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+(*  induction s1.
+  simpl. reflexivity. 
+  destruct a; simpl; intros s2; destruct s; try (rewrite IHp1; reflexivity).
+Abort.
+*)
+Admitted.
+  
+
+Theorem s_compile_correct : forall (st : state) (e : aexp),
+  s_execute st [] (s_compile e) = [aeval st e]. 
+Proof.
+  
+  intros. generalize dependent st.  generalize dependent ( [] : list nat).
+  
+  induction e. simpl. reflexivity.
+  simpl. reflexivity.
+  simpl. intros. rewrite K. rewrite IHe1. rewrite K. rewrite IHe2.  simpl. reflexivity.
+  intros. simpl.  rewrite K. rewrite IHe1. rewrite K. rewrite IHe2. simpl. reflexivity.
+  intros. simpl. rewrite K. rewrite IHe1. rewrite K. rewrite IHe2. simpl. reflexivity.
+Qed.
+
+  (** [] *)
 
 (** **** Exercise: 5 stars, advanced (break_imp)  *)
 Module BreakImp.

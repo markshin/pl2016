@@ -2213,8 +2213,8 @@ R55104:55109 Smallstep CImp BS_Eq1 constr
 R55104:55109 Smallstep CImp BS_Eq1 constr
 R55118:55122 Smallstep CImp AS_Id constr
 R55118:55122 Smallstep CImp AS_Id constr
-R55133:55141 Imp <> update_eq prfax
-R55133:55141 Imp <> update_eq prfax
+R55133:55141 Imp <> update_eq thm
+R55133:55141 Imp <> update_eq thm
 R55153:55162 Smallstep CImp multi_step constr
 R55153:55162 Smallstep CImp multi_step constr
 R55171:55177 Smallstep CImp CS_Par2 constr
@@ -2235,8 +2235,8 @@ R55302:55311 Smallstep CImp CS_ParDone constr
 R55302:55311 Smallstep CImp CS_ParDone constr
 R55322:55331 Smallstep CImp multi_refl constr
 R55322:55331 Smallstep CImp multi_refl constr
-R55345:55354 Imp <> update_neq prfax
-R55345:55354 Imp <> update_neq prfax
+R55345:55354 Imp <> update_neq thm
+R55345:55354 Imp <> update_neq thm
 R55402:55405 Smallstep CImp <> mod
 def 55614:55618 <> stack
 R55623:55626 Coq.Init.Datatypes <> list ind

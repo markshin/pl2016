@@ -3188,8 +3188,8 @@ R55560:55574 PE Loop pe_bexp_correct thm
 R55560:55574 PE Loop pe_bexp_correct thm
 R55677:55693 PE Loop ceval_count_sound thm
 R55677:55693 PE Loop ceval_count_sound thm
-R55748:55763 Imp <> loop_never_stops prfax
-R55748:55763 Imp <> loop_never_stops prfax
+R55748:55763 Imp <> loop_never_stops thm
+R55748:55763 Imp <> loop_never_stops thm
 R55871:55876 Imp <> ::'WHILE'_x_'DO'_x_'END' not
 R55893:55896 Imp <> ::'WHILE'_x_'DO'_x_'END' not
 R55906:55909 Imp <> ::'WHILE'_x_'DO'_x_'END' not
@@ -3433,8 +3433,8 @@ R61284:61289 PE <> E_None constr
 R61284:61289 PE <> E_None constr
 R61313:61337 Coq.Logic.FunctionalExtensionality <> functional_extensionality thm
 R61313:61337 Coq.Logic.FunctionalExtensionality <> functional_extensionality thm
-R61358:61368 Imp <> update_same prfax
-R61358:61368 Imp <> update_same prfax
+R61358:61368 Imp <> update_same thm
+R61358:61368 Imp <> update_same thm
 def 62099:62106 <> pe_block
 R62124:62131 PE <> pe_state def
 R62139:62143 PE <> block ind

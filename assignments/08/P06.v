@@ -11,6 +11,11 @@ Theorem skip_right: forall c,
     (c;; SKIP) 
     c.
 Proof. 
-  exact GIVEUP.
+    intros c st st'.
+  split; intros. 
+  inversion H. subst.  inversion H5. subst.
+  apply H2. 
+
+  apply E_Seq with st'. apply H. apply E_Skip.
 Qed.
 

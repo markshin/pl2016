@@ -12,6 +12,7 @@ Proof.
      [loopdef] terminates.  Most of the cases are immediately
      contradictory (and so can be solved in one step with
      [inversion]). *)
-  exact GIVEUP.
+  induction contra; inversion Heqloopdef.
+  subst. inversion H. subst. apply IHcontra2. reflexivity.
 Qed.
 
