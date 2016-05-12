@@ -304,6 +304,7 @@ Qed.
 (** Show that we can swap the branches of an IF by negating its
     condition *)
 
+
 Theorem swap_if_branches: forall b e1 e2,
   cequiv
     (IFB b THEN e1 ELSE e2 FI)
@@ -311,7 +312,16 @@ Theorem swap_if_branches: forall b e1 e2,
 Proof.
   intros. split; intros.
   inversion H; subst.
-  apply E_IfFalse. Abort.
+  apply E_IfFalse. simpl. rewrite H5. reflexivity. apply H6.
+  apply E_IfTrue. simpl. rewrite H5. reflexivity. apply H6.
+  inversion H; subst.
+  apply E_IfFalse. simpl in H5. SearchAbout negb. apply negb_true_iff in H5.
+  apply H5. apply H6.
+  apply E_IfTrue. simpl in H5. apply negb_false_iff in H5. apply H5.
+apply H6. 
+Qed.
+
+
 (** [] *)
 
 (** *** *)
@@ -333,7 +343,8 @@ Proof.
     inversion H; subst.
     SCase "E_WhileEnd".
       apply E_Skip.
-    SCase "E_WhileLoop".
+      SCase "E_WhileLoop".
+      unfold bequiv in Hb.
       rewrite Hb in H2. inversion H2.
   Case "<-".
     inversion H; subst.
@@ -374,6 +385,7 @@ Proof.
         prove [(WHILE b DO c END) / st || st'], the other cases of
         the induction are immediately contradictory. [] *)
 
+
 Lemma WHILE_true_nonterm : forall b c st st',
      bequiv b BTrue ->
      ~( (WHILE b DO c END) / st || st' ).
@@ -411,7 +423,17 @@ Theorem WHILE_true: forall b c,
        (WHILE b DO c END)
        (WHILE BTrue DO SKIP END).
 Proof. 
-  (* FILL IN HERE *) Admitted.
+  intros b c st st' Hb.
+  split; intros.
+  inversion H; subst.
+  apply WHILE_true_nonterm in H. inversion H.
+  apply st.
+  apply WHILE_true_nonterm in H. inversion H.
+  apply st.
+  apply WHILE_true_nonterm in H. inversion H.
+  unfold bequiv. reflexivity.
+Qed.
+
 (** [] *)
 
 Theorem loop_unrolling: forall b c,
@@ -436,13 +458,28 @@ Proof.
       apply E_WhileLoop with (st' := st'0). 
       assumption. assumption. assumption.
     SCase "loop doesn't run".
-      inversion H5; subst. apply E_WhileEnd. assumption.  Qed.
+    inversion H5; subst. apply E_WhileEnd. assumption.  Qed.
 
 (** **** Exercise: 2 stars, optional (seq_assoc)  *)
 Theorem seq_assoc : forall c1 c2 c3,
   cequiv ((c1;;c2);;c3) (c1;;(c2;;c3)).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. intros st st'.
+  split; intros.
+  inversion H; subst.
+  inversion H2; subst.
+  apply E_Seq with (st' := st'1). assumption.
+  apply E_Seq with (st' := st'0). assumption.
+  assumption.
+
+  inversion H; subst.
+  inversion H5; subst.
+  apply E_Seq with (st' := st'1).
+  apply E_Seq with (st' := st'0).
+  assumption.  assumption. assumption.
+Qed.
+
+  
 (** [] *)
 
 (** ** The Functional Equivalence Axiom *)
@@ -523,7 +560,8 @@ Proof.
        inversion H; subst. simpl.
        replace (update st X (st X)) with st.  
        constructor. 
-       apply functional_extensionality. intro. 
+       apply functional_extensionality. intro.
+       Print update_same.
        rewrite update_same; reflexivity.  
      Case "<-".
        inversion H; subst. 
@@ -531,7 +569,7 @@ Proof.
           apply functional_extensionality. intro. 
           rewrite update_same; reflexivity.
        rewrite H0 at 2. 
-       constructor. reflexivity.
+       constructor. simpl. reflexivity.
 Qed.
 
 (** **** Exercise: 2 stars (assign_aequiv)  *)
@@ -539,7 +577,26 @@ Theorem assign_aequiv : forall X e,
   aequiv (AId X) e -> 
   cequiv SKIP (X ::= e).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. unfold aequiv in H.
+  split; intros. 
+  inversion H0; subst. 
+  
+  
+  assert (st' = (update st' X (st' X))).
+  apply functional_extensionality. intros. rewrite update_same; reflexivity. 
+
+   
+  rewrite H1 at 2. constructor. rewrite <- H. simpl. reflexivity. 
+  inversion H0; subst.
+  assert (st = update st X (aeval st e)).
+  rewrite <- H. 
+  apply functional_extensionality. intros. rewrite update_same. reflexivity.
+  simpl. reflexivity.
+  rewrite <- H1. constructor. 
+Qed.
+
+
+  
 (** [] *)
 
 (* ####################################################### *)
@@ -732,15 +789,37 @@ Theorem CSeq_congruence : forall c1 c1' c2 c2',
   cequiv c1 c1' -> cequiv c2 c2' ->
   cequiv (c1;;c2) (c1';;c2').
 Proof. 
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  unfold cequiv.
+  intros. split; intros.
+  inversion H1; subst.
+  apply E_Seq with (st' := st'0). apply H.  assumption.  apply H0. assumption. 
+  inversion H1; subst.
+  apply E_Seq with (st' := st'0).
+  apply H. assumption. apply H0; assumption. 
+Qed.
+  (** [] *)
 
 (** **** Exercise: 3 stars (CIf_congruence)  *)
 Theorem CIf_congruence : forall b b' c1 c1' c2 c2',
   bequiv b b' -> cequiv c1 c1' -> cequiv c2 c2' ->
   cequiv (IFB b THEN c1 ELSE c2 FI) (IFB b' THEN c1' ELSE c2' FI).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  unfold bequiv, cequiv.
+  intros.
+  split; intros.
+  inversion H2; subst.
+  apply E_IfTrue. rewrite <- H. assumption.
+  rewrite <- H0. assumption.
+  apply E_IfFalse. rewrite <- H. assumption.
+  rewrite <- H1. assumption.
+  inversion H2; subst.
+  apply E_IfTrue. rewrite H; assumption. 
+  rewrite H0; assumption. 
+  apply E_IfFalse. rewrite H; assumption.
+  rewrite H1; assumption.
+Qed.
+
+SearchAbout (_ ++ []).
 (** [] *)
 
 (** *** *)
