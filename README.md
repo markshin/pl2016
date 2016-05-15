@@ -124,7 +124,7 @@
     + If a `P??.v` file contains string `GIVEUP`, then it will be scored 0.
 - `make submission` to prepare your submission.
     + `zip` should be installed. Otherwise, you can just zip `P??.v`.
-- Submit at: http://147.46.15.109:9480/
+- Submit at: http://147.46.219.145:8100/
     + *DO NOT ATTACK*. Please.
     + *DO NOT USE A STRONG PASSWORD*. It is `http`.
     + If your submission status is `SYSTEM ERROR` or `RUNNING` for a long time, even after refreshing your web browser for several times, please ask the TA.
