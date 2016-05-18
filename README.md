@@ -19,10 +19,11 @@
 
 | Due        	| Due (Delay)	| Description                   	 	 	 	 	 	 	 	 	 	 	 	 	 	| Points 	|
 |------------	|------------	|-----------------------------------------------------------------------------------	|-------	|
-| 20160515 23:59| 20160522 23:59| [Assignment 09](https://github.com/snu-sf-class/pl2016/tree/master/assignments/09)    | 60		|
-| 20160508 23:59| 20160515 23:59| [Assignment 08](https://github.com/snu-sf-class/pl2016/tree/master/assignments/08)    | 130		|
-| 20160501 23:59| 20160508 23:59| [Assignment 07](https://github.com/snu-sf-class/pl2016/tree/master/assignments/07)    | 120		|
-| 20160424 23:59| 20160501 23:59| [Assignment 06](https://github.com/snu-sf-class/pl2016/tree/master/assignments/06)    | 300		|
+| 20160522 23:59| 20160529 23:59| [Assignment 10](https://github.com/snu-sf-class/pl2016/tree/master/assignments/10)    | 120		|
+| 20160517 23:59| 20160522 23:59| [Assignment 09](https://github.com/snu-sf-class/pl2016/tree/master/assignments/09)    | 60		|
+| 20160508 23:59| 20160517 23:59| [Assignment 08](https://github.com/snu-sf-class/pl2016/tree/master/assignments/08)    | 130		|
+| 20160503 23:59| 20160508 23:59| [Assignment 07](https://github.com/snu-sf-class/pl2016/tree/master/assignments/07)    | 120		|
+| 20160424 23:59| 20160503 23:59| [Assignment 06](https://github.com/snu-sf-class/pl2016/tree/master/assignments/06)    | 300		|
 | 20160417 23:59| 20160424 23:59| [Assignment 05](https://github.com/snu-sf-class/pl2016/tree/master/assignments/05)    | 130		|
 | 20160410 23:59| 20160417 23:59| [Assignment 04](https://github.com/snu-sf-class/pl2016/tree/master/assignments/04)    | 260		|
 | 20160403 23:59| 20160410 23:59| [Assignment 03](https://github.com/snu-sf-class/pl2016/tree/master/assignments/03)    | 130		|
@@ -123,7 +124,7 @@
     + If a `P??.v` file contains string `GIVEUP`, then it will be scored 0.
 - `make submission` to prepare your submission.
     + `zip` should be installed. Otherwise, you can just zip `P??.v`.
-- Submit at: http://147.46.15.109:9480/
+- Submit at: http://147.46.219.145:8100/
     + *DO NOT ATTACK*. Please.
     + *DO NOT USE A STRONG PASSWORD*. It is `http`.
     + If your submission status is `SYSTEM ERROR` or `RUNNING` for a long time, even after refreshing your web browser for several times, please ask the TA.
