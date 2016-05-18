@@ -1313,6 +1313,7 @@ Definition constfold_0plus (c: com) : com :=
 Lemma optimize_0plus_aexp_sound:
   atrans_sound optimize_0plus_aexp.
 Proof.
+  
   unfold atrans_sound.
   induction a. simpl. apply refl_aequiv.
   simpl. apply refl_aequiv.
