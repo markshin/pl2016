@@ -64,7 +64,7 @@ Require Export Imp.
     lies at the core of a multitude of tools that are being used in
     academia and industry to specify and verify real software
     systems. *)
-
+SearchAbout minus.
 
   
 (* ####################################################### *)
@@ -427,6 +427,10 @@ Proof.
 
 (* FILL IN HERE *)
 (** [] *)
+Print aexp.
+Print update. 
+Print aeval. 
+Print state.
 
 (** **** Exercise: 2 stars (hoare_asgn_wrong)  *)
 (** The assignment rule looks backward to almost everyone the first
@@ -541,7 +545,7 @@ Theorem hoare_consequence_pre : forall (P P' Q : Assertion) c,
   {{P'}} c {{Q}} ->
   P ->> P' ->
   {{P}} c {{Q}}.
-Proof.
+Proof. 
   intros P P' Q c Hhoare Himp.
   intros st st' Hc HP. apply (Hhoare st st'). 
   assumption. apply Himp. assumption. Qed.
@@ -582,7 +586,8 @@ Qed.
                    Q' ->> Q
          -----------------------------   (hoare_consequence)
                 {{P}} c {{Q}}
-*)
+ *)
+
 
 Theorem hoare_consequence : forall (P P' Q Q' : Assertion) c,
   {{P'}} c {{Q'}} ->
@@ -664,6 +669,7 @@ Proof.
 
 Abort.
 
+Check plus_assoc. 
 (** An additional constraint is that existential variables cannot be
     instantiated with terms containing (ordinary) variables that did
     not exist at the time the existential variable was created. *)
@@ -757,8 +763,8 @@ Theorem hoare_seq : forall P Q R c1 c2,
 Proof.
   intros P Q R c1 c2 H1 H2 st st' H12 Pre.
   inversion H12; subst.
-  apply (H1 st'0 st'); try assumption.
-  apply (H2 st st'0); assumption. Qed.
+  apply (H1 st'0 st'). try assumption.
+  apply (H2 st st'0). assumption. assumption. Qed.
 
 (** Note that, in the formal rule [hoare_seq], the premises are
     given in "backwards" order ([c2] before [c1]).  This matches the
@@ -776,7 +782,8 @@ Proof.
       {{ X = n }}      <---- decoration for Q
     SKIP
       {{ X = n }}
-*)
+ *)
+
 
 Example hoare_asgn_example3 : forall a n,
   {{fun st => aeval st a = n}} 
@@ -803,13 +810,21 @@ Proof.
                    {{ X = 1 /\ 2 = 2 }}
     Y ::= 2
                    {{ X = 1 /\ Y = 2 }}
-*)
+ *)
 
 Example hoare_asgn_example4 :
   {{fun st => True}} (X ::= (ANum 1);; Y ::= (ANum 2)) 
   {{fun st => st X = 1 /\ st Y = 2}}.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  eapply hoare_seq.
+  apply hoare_asgn.
+  eapply hoare_consequence_pre.
+  apply hoare_asgn.
+  intros st H.  
+  split. unfold update. simpl. reflexivity.
+  unfold update. simpl. reflexivity. 
+Qed.
+Check hoare_asgn. 
 (** [] *)
 
 (** **** Exercise: 3 stars (swap_exercise)  *)
@@ -905,6 +920,7 @@ Proof.
 
 (** Now we can formalize the Hoare proof rule for conditionals
     and prove it correct. *)
+
 
 Theorem hoare_if : forall P Q b c1 c2,
   {{fun st => P st /\ bassn b st}} c1 {{Q}} ->
@@ -1013,7 +1029,17 @@ Theorem if_minus_plus :
   FI
   {{fun st => st Y = st X + st Z}}. 
 Proof.
-  (* FILL IN HERE *) Admitted.
+  apply hoare_if.
+  eapply hoare_consequence_pre. apply hoare_asgn.
+  unfold bassn, assn_sub, update, assert_implies.
+  simpl. intros st [_ H].
+  apply le_plus_minus. 
+  apply ble_nat_true in H.
+  assumption. 
+  eapply hoare_consequence_pre. apply hoare_asgn.
+  unfold bassn, assn_sub, update, assert_implies.
+  simpl. intros. reflexivity. 
+Qed.
 
 (* ####################################################### *)
 (** *** Exercise: One-sided conditionals *)
@@ -1069,6 +1095,7 @@ Notation "'IF1' b 'THEN' c 'FI'" :=
 
 Reserved Notation "c1 '/' st '||' st'" (at level 40, st at level 39).
 
+SearchAbout state.
 Inductive ceval : com -> state -> state -> Prop :=
   | E_Skip : forall st : state, SKIP / st || st
   | E_Ass : forall (st : state) (a1 : aexp) (n : nat) (X : id),

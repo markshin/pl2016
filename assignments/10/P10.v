@@ -64,6 +64,36 @@ Theorem add_three_numbers_correct: forall a b c,
   END
   {{ fun st => st Z = a + b + c }}.
 Proof.
-  exact GIVEUP.
+  intros. eapply hoare_seq. eapply hoare_seq.
+  apply hoare_seq with (fun st => st Z = st X + c /\ st Y = 0).
+  apply hoare_seq with (fun st => st Z = st Y + a + c).
+  eapply hoare_consequence_post. 
+  apply hoare_while.
+  eapply hoare_seq. apply hoare_asgn.
+  eapply hoare_consequence_pre. apply hoare_asgn.
+  unfold assert_implies, assn_sub, update. 
+  simpl. intros. destruct H.
+  apply negb_true in H0. apply beq_nat_false in H0. omega.
+ 
+  unfold assert_implies, assn_sub, update. 
+  simpl. intros. destruct H.
+  apply negb_false in H0. apply beq_nat_true in H0. omega.
+ 
+  eapply hoare_consequence_post. apply hoare_while.
+  eapply hoare_seq. apply hoare_asgn.
+  eapply hoare_consequence_pre. apply hoare_asgn.
+  unfold assert_implies, assn_sub, update. 
+  simpl. intros. destruct H.
+  destruct H. apply negb_true in H0. apply beq_nat_false in H0. omega.
+  
+ unfold assert_implies, assn_sub, update. 
+  simpl. intros. destruct H.
+  destruct H. apply negb_false in H0. apply beq_nat_true in H0. omega.
+  apply hoare_asgn. apply hoare_asgn.
+  eapply hoare_consequence_pre. apply hoare_asgn.
+ 
+ unfold assert_implies, assn_sub, update. simpl. intros.
+  split.  reflexivity. reflexivity. 
+ 
 Qed.
 

@@ -7,6 +7,6 @@ Theorem assn_sub_ex2:
      X ::= ANum 3
   {{ fun st => 0 <= st X /\ st X <= 5 }}.
 Proof.
-  exact GIVEUP.
+  apply hoare_asgn.
 Qed.
 
