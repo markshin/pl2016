@@ -11,6 +11,7 @@
 
 ## Announcements
 
+- There will be a final exam on 2016/06/11 (Sat). For more detail, see: https://github.com/snu-sf-class/pl2016/issues/81
 - There will be a midterm exam on 2016/04/16 (Sat). For more detail, see: https://github.com/snu-sf-class/pl2016/issues/56
 - There will be a lab session on 2016/03/08 (Tue).
 - March 22's lecture is related to: https://github.com/snu-sf-class/pl2016/blob/master/sf/MoreInd.v
