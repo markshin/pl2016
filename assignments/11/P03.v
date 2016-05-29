@@ -6,6 +6,6 @@ Require Export P02.
 Lemma test_multistep_2:
   C 3 ==>* C 3.
 Proof.
-  exact GIVEUP.
+ apply multi_refl. 
 Qed.
 

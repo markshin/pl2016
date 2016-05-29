@@ -14,6 +14,18 @@ Require Export P10.
 Theorem evalF_eval : forall t n,
   evalF t = n <-> t || n.
 Proof.
-  exact GIVEUP.
-Qed.
+
+  split.
+  generalize dependent n.  
+  induction t.
+  intros. simpl in *. rewrite H. constructor.
+  intros. simpl in *. rewrite <- H.  constructor.
+  apply IHt1. reflexivity.
+  apply IHt2. reflexivity.
+  intros.
+  induction H. simpl. reflexivity.
+  simpl. subst. reflexivity. 
+    
+    
+    Qed.
 

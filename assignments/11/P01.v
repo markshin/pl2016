@@ -21,6 +21,7 @@ Example test_step_2 :
           (C 2) 
           (C (0 + 3))).
 Proof. 
-  exact GIVEUP.
+apply ST_Plus2. constructor. apply ST_Plus2. constructor. apply ST_PlusConstConst.
+
 Qed.
 

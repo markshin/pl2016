@@ -208,9 +208,11 @@ Example test_step_2 :
         (P 
           (C 2) 
           (C (0 + 3))).
-Proof. 
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+Proof.
+  
+  apply ST_Plus2. apply ST_Plus2. apply ST_PlusConstConst.
+Qed.
+  (** [] *)
 
 
 
@@ -966,17 +968,20 @@ Proof.
 Lemma test_multistep_2:
   C 3 ==>* C 3.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  apply multi_refl.
 (** [] *)
-
+Qed.
+  
 (** **** Exercise: 1 star, optional (test_multistep_3)  *)
 Lemma test_multistep_3:
       P (C 0) (C 3)
    ==>*
       P (C 0) (C 3).
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  apply multi_refl.
+Qed.
+
+  (** [] *)
 
 (** **** Exercise: 2 stars (test_multistep_4)  *)
 Lemma test_multistep_4:
@@ -990,7 +995,13 @@ Lemma test_multistep_4:
         (C 0)
         (C (2 + (0 + 3))).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  eapply multi_step. apply ST_Plus2. apply v_const. apply ST_Plus2. apply v_const.
+  apply ST_PlusConstConst. 
+  eapply multi_step. apply ST_Plus2. apply v_const. 
+   apply ST_PlusConstConst. 
+   apply multi_refl.
+Qed.
+ 
 (** [] *)
 
 (* ########################################################### *)
@@ -1598,7 +1609,27 @@ Lemma par_body_n__Sn : forall n st,
   st X = n /\ st Y = 0 ->
   par_loop / st ==>* par_loop / (update st X (S n)).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n st.
+  intros. destruct H.
+
+  
+  eapply multi_step. apply CS_Par2. apply CS_While.
+  eapply multi_step. apply CS_Par2. apply CS_IfStep.
+  apply BS_Eq1. apply AS_Id.
+  eapply multi_step. apply CS_Par2. apply CS_IfStep.
+  apply BS_Eq. simpl. rewrite H0. simpl.
+  eapply multi_step. apply CS_Par2. apply CS_IfTrue. 
+  eapply multi_step. apply CS_Par2. apply CS_SeqStep.
+  apply CS_AssStep. apply AS_Plus1. apply AS_Id.
+  eapply multi_step. apply CS_Par2. apply CS_SeqStep.
+  apply CS_AssStep. apply AS_Plus.
+  eapply multi_step. apply CS_Par2. apply CS_SeqStep.
+  apply CS_Ass.
+  eapply multi_step. apply CS_Par2. apply CS_SeqFinish.
+  rewrite plus_comm. simpl. subst. apply multi_refl. 
+Qed.
+ 
+  
 (** [] *)
 
 (** **** Exercise: 3 stars, optional  *)
@@ -1607,8 +1638,17 @@ Lemma par_body_n : forall n st,
   exists st',
     par_loop / st ==>*  par_loop / st' /\ st' X = n /\ st' Y = 0.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros.
+  inversion H; subst.  
+  induction n .
+  exists st. split. apply multi_refl. assumption.  
+  inversion IHn;subst.  inversion H2. inversion H4.
+  exists (update x X (S n)).
+  split. eapply multi_trans. apply H3. 
+  apply par_body_n__Sn.
+  assumption. split. auto. auto. 
+Qed. 
+  (** [] *)
 
 (** ... the above loop can exit with [X] having any value
     whatsoever. *)

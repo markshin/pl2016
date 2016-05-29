@@ -14,6 +14,12 @@ Lemma test_multistep_4:
         (C 0)
         (C (2 + (0 + 3))).
 Proof.
-  exact GIVEUP.
-Qed.
+
+  eapply multi_step. apply ST_Plus2. apply v_const. apply ST_Plus2. apply v_const.
+  apply ST_PlusConstConst. 
+  eapply multi_step. apply ST_Plus2. apply v_const. 
+   apply ST_PlusConstConst. 
+   apply multi_refl.
+    
+    Qed.
 

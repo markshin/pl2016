@@ -30,6 +30,25 @@ Require Export P01.
 
 Theorem step_deterministic_alt: deterministic step.
 Proof.
-  exact GIVEUP.
+    unfold deterministic.
+    intros.
+    generalize dependent y2.
+    induction H; intros.
+   {  inversion H0. 
+    reflexivity. inversion H3.
+    inversion H4. 
+ } {   inversion H0; subst.  
+   inversion H. 
+    rewrite <- (IHstep t1'0). reflexivity. assumption.
+     inversion H3. subst. inversion H.       
+    
+}
+inversion H1. subst. 
+inversion H0. 
+inversion H. subst. inversion H5.
+rewrite <- (IHstep t2'0). reflexivity. assumption.        
+
+
+
 Qed.
 
