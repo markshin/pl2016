@@ -146,7 +146,7 @@ Proof.
 (** If we want to see which facts [auto] is using, we can use [info_auto] instead. *)
 
 Example auto_example_5: 2 = 2.
-Proof.
+Proof. 
   info_auto.  (* subsumes reflexivity because eq_refl is in hint database *)
 Qed.
 

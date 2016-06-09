@@ -150,12 +150,14 @@ Definition equiv_classes : list (list com) :=
 Theorem aequiv_example:
   aequiv (AMinus (AId X) (AId X)) (ANum 0).
 Proof.
+  unfold aequiv. 
   intros st. simpl. omega. 
 Qed.
 
 Theorem bequiv_example:
   bequiv (BEq (AMinus (AId X) (AId X)) (ANum 0)) BTrue. 
-Proof. 
+Proof.
+  unfold bequiv. 
   intros st. unfold beval.
   rewrite aequiv_example. reflexivity.
 Qed.
@@ -169,6 +171,7 @@ Theorem skip_left: forall c,
      c.
 Proof. 
   (* WORKED IN CLASS *)
+  unfold cequiv. 
   intros c st st'.
   split; intros H.
   Case "->". 
@@ -190,6 +193,13 @@ Theorem skip_right: forall c,
     (c;; SKIP) 
     c.
 Proof. 
+(*  unfold cequiv.
+  intros. split.
+  intros.
+  inversion H; subst. inversion H5; subst. assumption.
+  intros.
+  apply E_Seq with st'. assumption. constructor. 
+*)
   intros c st st'.
   split; intros. 
   inversion H. subst.  inversion H5. subst.
@@ -208,7 +218,7 @@ Theorem IFB_true_simple: forall c1 c2,
     (IFB BTrue THEN c1 ELSE c2 FI) 
     c1.
 Proof. 
-  intros c1 c2. 
+  intros c1 c2.
   split; intros H.
   Case "->".
     inversion H; subst. assumption. inversion H5.
@@ -288,6 +298,14 @@ Theorem IFB_false: forall b c1 c2,
     (IFB b THEN c1 ELSE c2 FI) 
     c2.
 Proof.
+(*  unfold bequiv. 
+  intros. unfold cequiv.
+  intros.
+  split. intros. 
+  inversion H0; subst. simpl in H. rewrite H in H6. inversion H6. assumption. 
+  intros. simpl in *.
+  apply E_IfFalse. rewrite H. reflexivity. assumption. 
+*)  
   intros.
   split. intros.
   inversion H0; subst.
@@ -310,6 +328,17 @@ Theorem swap_if_branches: forall b e1 e2,
     (IFB b THEN e1 ELSE e2 FI)
     (IFB BNot b THEN e2 ELSE e1 FI).
 Proof.
+(*  unfold cequiv.
+  intros.
+  split; intros. 
+  inversion H; subst.
+  apply E_IfFalse. simpl. rewrite H5. reflexivity. assumption.
+  apply E_IfTrue. simpl. rewrite H5. reflexivity. assumption. 
+  inversion H; subst. simpl in *. apply negb_true_iff in H5. apply E_IfFalse.
+  assumption. assumption. apply E_IfTrue. simpl in *. apply negb_false_iff in H5.
+  apply H5. assumption. 
+*)
+  
   intros. split; intros.
   inversion H; subst.
   apply E_IfFalse. simpl. rewrite H5. reflexivity. apply H6.
@@ -337,7 +366,19 @@ Theorem WHILE_false : forall b c,
      cequiv
        (WHILE b DO c END)
        SKIP.
-Proof. 
+Proof.
+(*  unfold bequiv, cequiv. 
+  intros. 
+  split; intros. 
+  simpl in *.
+  inversion H0;subst. 
+  apply E_Skip. 
+  rewrite H in H3.  inversion H3.
+  inversion H0; subst.
+  simpl in *.
+  apply E_WhileEnd. apply H.
+  *)
+
   intros b c Hb. split; intros H.
   Case "->".
     inversion H; subst.
@@ -389,7 +430,18 @@ Proof.
 Lemma WHILE_true_nonterm : forall b c st st',
      bequiv b BTrue ->
      ~( (WHILE b DO c END) / st || st' ).
-Proof. 
+Proof.
+(*  intros. 
+  unfold bequiv.
+  intros H0.
+  simpl in *.
+  remember (WHILE b DO c END) as cw eqn:Hqn.
+  induction H0;  
+    inversion Hqn; subst.
+  unfold bequiv in H. simpl in *. rewrite H in H0. inversion H0.
+  apply IHceval2. reflexivity.
+ *)
+                 
   (* WORKED IN CLASS *)
   intros b c st st' Hb.
   intros H.
@@ -422,7 +474,19 @@ Theorem WHILE_true: forall b c,
      cequiv 
        (WHILE b DO c END)
        (WHILE BTrue DO SKIP END).
-Proof. 
+Proof.
+(*  
+  unfold bequiv, cequiv.  
+  split; intros. 
+  inversion H0; subst. 
+  apply WHILE_true_nonterm in H0. inversion H0.
+  unfold bequiv. assumption. 
+  apply WHILE_true_nonterm in H0. inversion H0. 
+  unfold bequiv. assumption. 
+  apply WHILE_true_nonterm in H0. inversion H0.
+  unfold bequiv. reflexivity. 
+*)
+  
   intros b c st st' Hb.
   split; intros.
   inversion H; subst.
@@ -441,6 +505,19 @@ Theorem loop_unrolling: forall b c,
     (WHILE b DO c END)
     (IFB b THEN (c;; WHILE b DO c END) ELSE SKIP FI).
 Proof.
+(*  unfold cequiv. 
+  intros. 
+  split; intros. 
+  inversion H; subst.
+  apply E_IfFalse. assumption. constructor. 
+  apply E_IfTrue. assumption. 
+  eapply E_Seq. apply H3. apply H6.
+  inversion H; subst.
+  inversion H6;subst. 
+  apply E_WhileLoop with st'0. assumption. assumption. assumption. 
+  inversion H6;subst. apply E_WhileEnd. assumption. 
+*)
+  
   (* WORKED IN CLASS *)
   intros b c st st'.
   split; intros Hce.
@@ -464,6 +541,22 @@ Proof.
 Theorem seq_assoc : forall c1 c2 c3,
   cequiv ((c1;;c2);;c3) (c1;;(c2;;c3)).
 Proof.
+(*
+  unfold cequiv.
+  intros. 
+  split; intros. 
+  inversion H;subst. 
+  inversion H2; subst. 
+  apply E_Seq with (st' := st'1). assumption. 
+  apply E_Seq with (st' := st'0). assumption. 
+  assumption. 
+  inversion H;subst.
+  inversion H5; subst. 
+  apply E_Seq with (st' := st'1).
+  apply E_Seq with (st' := st'0).
+  assumption.  assumption. assumption.
+  *)
+  
   intros. intros st st'.
   split; intros.
   inversion H; subst.
@@ -577,6 +670,19 @@ Theorem assign_aequiv : forall X e,
   aequiv (AId X) e -> 
   cequiv SKIP (X ::= e).
 Proof.
+(*  unfold aequiv, cequiv.
+  intros. 
+  split; intros. 
+  inversion H0; subst.
+  assert (st' = (update st' X (st' X))). 
+  apply functional_extensionality. intro. rewrite update_same; reflexivity. 
+  rewrite H1 at 2.  constructor. rewrite <- H. reflexivity. 
+  inversion H0; subst.
+  assert (st = (update st X (aeval st e))). 
+  apply functional_extensionality. intros.
+  rewrite <- H. simpl. rewrite update_same; reflexivity.
+  rewrite <- H1. constructor.
+*)  
   intros. unfold aequiv in H.
   split; intros. 
   inversion H0; subst. 
@@ -788,7 +894,14 @@ Proof.
 Theorem CSeq_congruence : forall c1 c1' c2 c2',
   cequiv c1 c1' -> cequiv c2 c2' ->
   cequiv (c1;;c2) (c1';;c2').
-Proof. 
+Proof.
+(*  unfold cequiv. 
+  intros. split; intros. 
+  inversion H1; subst. 
+  apply E_Seq with st'0. apply H. assumption. apply H0. assumption. 
+  inversion H1; subst.
+  apply E_Seq with st'0. apply H. assumption. apply H0. assumption. 
+  *)
   unfold cequiv.
   intros. split; intros.
   inversion H1; subst.
@@ -804,6 +917,19 @@ Theorem CIf_congruence : forall b b' c1 c1' c2 c2',
   bequiv b b' -> cequiv c1 c1' -> cequiv c2 c2' ->
   cequiv (IFB b THEN c1 ELSE c2 FI) (IFB b' THEN c1' ELSE c2' FI).
 Proof.
+(*
+  unfold bequiv, cequiv.
+  intros. 
+  split; intros.
+  inversion H2; subst.
+  apply E_IfTrue. rewrite <- H.   assumption. 
+  apply H0. assumption.
+  apply E_IfFalse. rewrite <- H. assumption. apply H1. assumption.
+  inversion H2; subst.
+  apply E_IfTrue. rewrite H. assumption. apply H0. assumption. 
+  apply E_IfFalse. rewrite H. assumption. apply H1. assumption. 
+*)
+
   unfold bequiv, cequiv.
   intros.
   split; intros.
@@ -850,8 +976,8 @@ Proof.
     apply refl_cequiv. 
     apply CIf_congruence.
       apply refl_bequiv.
-      apply CAss_congruence. unfold aequiv. simpl. 
-        symmetry. apply minus_diag.
+      apply CAss_congruence. unfold aequiv. simpl.  
+        symmetry.  apply minus_diag.
       apply refl_cequiv. 
 Qed.
 
@@ -1165,6 +1291,15 @@ Proof.
   rename a into a1. rename a0 into a2. simpl.
   remember (fold_constants_aexp a1) as a1' eqn:Heqa1'.
   remember (fold_constants_aexp a2) as a2' eqn:Heqa2'.
+
+(*  assert (aeval st a1 = aeval st a1'). 
+  rewrite  Heqa1'. rewrite <- fold_constants_aexp_sound. reflexivity.
+  assert (aeval st a2 = aeval st a2').
+  rewrite Heqa2'. rewrite <- fold_constants_aexp_sound. reflexivity.
+  rewrite H. rewrite H0.  
+  destruct a1'; destruct a2'; try reflexivity.
+  simpl. destruct (ble_nat n n0). reflexivity. auto.
+*)  
   replace (aeval st a1) with (aeval st a1') by (subst a1'; rewrite <- fold_constants_aexp_sound; reflexivity).
   replace (aeval st a2) with (aeval st a2') by (subst a2'; rewrite <- fold_constants_aexp_sound; reflexivity).
   destruct a1'; destruct a2'; try reflexivity.
@@ -1210,6 +1345,13 @@ Proof.
       Case "WHILE".
   assert (bequiv b (fold_constants_bexp b)).
   apply fold_constants_bexp_sound.
+(*
+  destruct (fold_constants_bexp b) eqn:Heqb. apply WHILE_true. assumption. 
+  apply WHILE_false. assumption. apply CWhile_congruence. assumption. 
+  assumption. apply CWhile_congruence. assumption. assumption.
+  apply CWhile_congruence. assumption. assumption.
+  apply CWhile_congruence. assumption. assumption.*)
+                                          
   destruct (fold_constants_bexp b) eqn:Heqb; try (apply WHILE_true; assumption); try (apply CWhile_congruence; assumption).
   apply trans_cequiv with (WHILE BFalse DO c END).
   apply CWhile_congruence. assumption. apply refl_cequiv.
@@ -1313,8 +1455,25 @@ Definition constfold_0plus (c: com) : com :=
 Lemma optimize_0plus_aexp_sound:
   atrans_sound optimize_0plus_aexp.
 Proof.
-  
-  unfold atrans_sound.
+(*  unfold atrans_sound.
+  unfold aequiv. 
+  intros. 
+  induction a. simpl. auto. simpl. auto.
+  - destruct a1; destruct a2;
+    try (destruct n); try (destruct n0); simpl; auto.
+    simpl in *. rewrite IHa1. auto.
+    simpl in *. rewrite IHa1. auto.
+    simpl in *. rewrite IHa1. auto.
+
+  - destruct a1; destruct a2; try (destruct n); try (destruct n0); simpl; auto. 
+    simpl in *. rewrite IHa2. auto.
+    simpl in *. rewrite IHa2. auto.
+    simpl in *. rewrite IHa2. auto. 
+  - destruct a1; destruct a2; try (destruct n); try(destruct n0); simpl; auto. 
+*)
+
+    
+    unfold atrans_sound.
   induction a. simpl. apply refl_aequiv.
   simpl. apply refl_aequiv.
   {
@@ -1337,6 +1496,17 @@ Qed.
 Lemma optimize_0plus_bexp_sound:
   btrans_sound optimize_0plus_bexp.
 Proof.
+(*  unfold btrans_sound. 
+  unfold bequiv. 
+  induction b; intros; auto. 
+  - simpl. rewrite <- optimize_0plus_aexp_sound. rewrite <- optimize_0plus_aexp_sound.    auto. 
+  - simpl. rewrite <- optimize_0plus_aexp_sound. rewrite <- optimize_0plus_aexp_sound.
+    auto.
+  - simpl. rewrite IHb. auto.
+  - simpl. rewrite IHb1; rewrite IHb2. auto.
+*)
+
+    
   unfold btrans_sound.
   induction b.  simpl. apply refl_bequiv.
   simpl. apply refl_bequiv.
@@ -1363,6 +1533,19 @@ Qed.
 Lemma optimize_0plus_com_sound:
   ctrans_sound optimize_0plus_com.
 Proof.
+(*  unfold ctrans_sound.
+  unfold cequiv.
+  induction c.
+  intros.
+  simpl. apply refl_cequiv.
+  simpl. apply CAss_congruence. apply optimize_0plus_aexp_sound. 
+  simpl. apply CSeq_congruence. assumption. assumption.
+  simpl. apply CIf_congruence. apply optimize_0plus_bexp_sound. 
+  assumption. assumption.
+  simpl. apply CWhile_congruence. apply optimize_0plus_bexp_sound. 
+  assumption.
+*)
+  
   unfold ctrans_sound.
   intros.
   induction c.
@@ -1380,6 +1563,11 @@ Qed.
 Lemma constfold_0plus_sound:
   ctrans_sound constfold_0plus.
 Proof.
+(*  unfold ctrans_sound.
+  unfold constfold_0plus.
+  intros. apply trans_cequiv with (fold_constants_com c). apply fold_constants_com_sound.
+  apply optimize_0plus_com_sound.
+*)  
   unfold ctrans_sound.
   unfold constfold_0plus.
   intros.

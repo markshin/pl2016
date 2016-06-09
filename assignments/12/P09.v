@@ -17,6 +17,13 @@ Theorem subject_expansion_false:
     |- t' \in T /\
     ~ |- t \in T.
 Proof.
-  exact GIVEUP.
+  exists (tif ttrue ttrue tzero).
+  exists ttrue.
+  exists TBool.
+  split. auto.
+  split. auto.
+  unfold not. intros. 
+  inversion H; subst.
+  inversion H6.  
 Qed.
 

@@ -14,6 +14,22 @@ Require Export P01.
 Lemma value_is_nf : forall t,
   value t -> step_normal_form t.
 Proof.
-  exact GIVEUP.
+  intros. unfold normal_form. unfold not.
+  intros.
+  inversion H0;subst. inversion H. 
+  inversion H2; subst. inversion H1.
+  inversion H1.
+  inversion H2; subst. inversion H1.
+  generalize dependent x.
+  induction H2. intros. 
+  inversion H1. 
+  intros. 
+  inversion H1; subst. 
+  eapply IHnvalue.
+  right. assumption. 
+  exists t1'. assumption. 
+  apply H5. 
+
+
 Qed.
 

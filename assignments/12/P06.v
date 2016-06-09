@@ -25,10 +25,15 @@ Proof with auto.
     SCase "ST_IfFalse". assumption.
     SCase "ST_If". apply T_If; try assumption.
       apply IHHT1; assumption.
-      exact GIVEUP.
-  Case "T_Pred".
-    exact GIVEUP.
-  Case "T_Iszero".
-    exact GIVEUP.
+  - inversion HE; subst. auto.    
+-  Case "T_Pred".
+   inversion HE; subst. auto.
+   inversion HT; subst. assumption.
+   auto. 
+-  Case "T_Iszero".
+    inversion HE; subst.
+    auto. auto. auto.
+
+
 Qed.
 

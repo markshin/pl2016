@@ -399,6 +399,8 @@ Notation "P [ X |-> a ]" := (assn_sub X a P) (at level 10).
 Theorem hoare_asgn : forall Q X a,
   {{Q [X |-> a]}} (X ::= a) {{Q}}.
 Proof.
+  Print assn_sub.
+
   unfold hoare_triple.
   intros Q X a st st' HE HQ.
   inversion HE. subst.
@@ -471,8 +473,37 @@ Theorem hoare_asgn_fwd :
     X ::= a
   {{fun st => P (update st X m) /\ st X = aeval (update st X m) a }}.
 Proof.
+(*  intros functional_extensionality m a P.
+  unfold hoare_triple. intros. destruct H0.
+  inversion H; subst.
+  assert (update (update st X (aeval st a)) X (st X) = st).
+  apply functional_extensionality. intros. rewrite update_shadow.
+  destruct (eq_id_dec X x). rewrite e. rewrite update_eq. reflexivity.
+  rewrite update_neq. reflexivity. assumption.
+  rewrite H1. split. assumption. rewrite update_eq. reflexivity.
+*)
+
   intros functional_extensionality m a P.
-  (* FILL IN HERE *) Admitted.
+  unfold hoare_triple.
+  intros. split. destruct H0.
+  inversion H; subst.
+  
+  assert (update (update st X (aeval st a)) X (st X) = st). 
+  apply functional_extensionality. intros. 
+  rewrite update_shadow. unfold update.   destruct (eq_id_dec X x). 
+  subst. auto. auto. 
+  rewrite H1.  assumption. 
+  destruct H0. inversion H; subst. rewrite update_eq.
+  
+  assert (update (update st X (aeval st a)) X (st X) = st). 
+  apply functional_extensionality. intros. rewrite update_shadow. 
+  unfold update. destruct (eq_id_dec X x). subst. auto. auto. 
+  rewrite H1. 
+  reflexivity. 
+  
+Qed.
+
+
 (** [] *)
 
 (** **** Exercise: 2 stars, advanced (hoare_asgn_fwd_exists)  *)
@@ -497,7 +528,22 @@ Theorem hoare_asgn_fwd_exists :
                 st X = aeval (update st X m) a }}.
 Proof.
   intros functional_extensionality a P.
-  (* FILL IN HERE *) Admitted.
+  unfold hoare_triple. 
+  intros. exists (st X). inversion H; subst. 
+  split. simpl in *. 
+  assert (update (update st X (aeval st a)) X (st X) = st). 
+  apply functional_extensionality. intros. 
+  rewrite update_shadow. unfold update.   destruct (eq_id_dec X x). 
+  subst. auto. auto.
+  rewrite H1. assumption. 
+  rewrite update_eq. 
+   assert (update (update st X (aeval st a)) X (st X) = st). 
+  apply functional_extensionality. intros. 
+  rewrite update_shadow. unfold update.   destruct (eq_id_dec X x). 
+  subst. auto. auto.
+  rewrite H1. auto. 
+Qed.  
+
 (** [] *)
 
 (* ####################################################### *) 
@@ -545,7 +591,13 @@ Theorem hoare_consequence_pre : forall (P P' Q : Assertion) c,
   {{P'}} c {{Q}} ->
   P ->> P' ->
   {{P}} c {{Q}}.
-Proof. 
+Proof.
+(*  unfold hoare_triple. 
+  intros. 
+  apply H in H1. assumption.
+  apply H in H1. apply H0 in H2. assumption. 
+apply H0 in H2. assumption. 
+*)    
   intros P P' Q c Hhoare Himp.
   intros st st' Hc HP. apply (Hhoare st st'). 
   assumption. apply Himp. assumption. Qed.
@@ -794,7 +846,7 @@ Proof.
   Case "right part of seq".
     apply hoare_skip.
   Case "left part of seq".
-    eapply hoare_consequence_pre. apply hoare_asgn. 
+  eapply hoare_consequence_pre. apply hoare_asgn.
     intros st H. subst. reflexivity. Qed.
 
 (** You will most often use [hoare_seq] and
@@ -1029,6 +1081,16 @@ Theorem if_minus_plus :
   FI
   {{fun st => st Y = st X + st Z}}. 
 Proof.
+(*  apply hoare_if. 
+  eapply hoare_consequence_pre. apply hoare_asgn. 
+  unfold bassn, assn_sub, update, assert_implies. 
+  simpl. intros. destruct H. apply ble_nat_true in H0. 
+  omega. 
+  eapply hoare_consequence_pre. apply hoare_asgn. 
+  unfold bassn, assn_sub, update, assert_implies. 
+  simpl. 
+  intros. destruct H. auto.  
+*)
   apply hoare_if.
   eapply hoare_consequence_pre. apply hoare_asgn.
   unfold bassn, assn_sub, update, assert_implies.

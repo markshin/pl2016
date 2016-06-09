@@ -1209,7 +1209,13 @@ Theorem eval__multistep : forall t n,
     includes [==>]. *)
 
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction H. apply multi_refl.
+  eapply multi_trans. apply multistep_congr_1. apply IHeval1.
+  eapply multi_trans. apply multistep_congr_2. apply v_const. 
+  apply IHeval2.
+  apply multi_R. apply ST_PlusConstConst. 
+Qed.
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced (eval__multistep_inf)  *)
@@ -1228,7 +1234,15 @@ Lemma step__eval : forall t t' n,
      t || n.
 Proof.
   intros t t' n Hs. generalize dependent n.
-  (* FILL IN HERE *) Admitted.
+  induction Hs. intros. 
+  inversion H; subst. constructor. constructor. constructor.
+  intros. inversion H; subst.  apply IHHs in H2. constructor. 
+  assumption. assumption. 
+  intros. inversion H0; subst. apply IHHs in H5.
+  constructor. assumption. assumption.
+Qed.
+
+  
 (** [] *)
 
 (** The fact that small-step reduction implies big-step is now
@@ -1243,7 +1257,13 @@ Proof.
 Theorem multistep__eval : forall t t',
   normal_form_of t t' -> exists n, t' = C n /\ t || n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  destruct H. rewrite nf_same_as_value in H0.
+  inversion H0.
+  exists n. split. auto.
+  induction H; subst. constructor.
+  eapply step__eval. apply H. apply IHmulti. assumption. auto. 
+Qed.  
 (** [] *)
 
 (* ########################################################### *)
@@ -1261,8 +1281,16 @@ Proof.
 Theorem evalF_eval : forall t n,
   evalF t = n <-> t || n.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  split. generalize dependent n. 
+  induction t; intros. 
+  simpl in *. rewrite H. constructor.
+  simpl in *. rewrite <- H. constructor.
+  apply IHt1. auto. apply IHt2. auto. 
+  intros. induction H.
+  simpl. auto. subst. auto. 
+Qed.
+
+  (** [] *)
 
 (** **** Exercise: 4 stars (combined_properties)  *)
 (** We've considered the arithmetic and conditional expressions

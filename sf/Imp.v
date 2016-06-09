@@ -549,6 +549,16 @@ Proof. reflexivity. Qed.
 Theorem optimize_0plus_b_sound : forall b,
   beval (optimize_0plus_b b) = beval b.
 Proof.
+ (* intros.
+  induction b. simpl. reflexivity. 
+  simpl. reflexivity.
+  simpl. rewrite optimize_0plus_sound. rewrite optimize_0plus_sound'''.
+  reflexivity.
+  simpl. rewrite optimize_0plus_sound'''. rewrite optimize_0plus_sound'''.
+  reflexivity.
+  simpl. rewrite IHb. reflexivity.
+  simpl. rewrite IHb1. rewrite IHb2. reflexivity. 
+*)
   intros. induction b;
     try (simpl; reflexivity); 
   try (simpl; rewrite optimize_0plus_sound'''; rewrite optimize_0plus_sound'''; reflexivity).
@@ -842,6 +852,26 @@ Inductive bevalR: bexp -> bool -> Prop :=
 
 Theorem beval_iff_bevalR : forall b bv, bevalR b bv <-> beval b = bv.
 Proof.
+(*  split.
+  intros.
+  induction H.  simpl. reflexivity. simpl. reflexivity. 
+  simpl. rewrite aeval_iff_aevalR' in H. rewrite aeval_iff_aevalR' in H0.
+  subst. reflexivity.
+  simpl. rewrite aeval_iff_aevalR' in H. rewrite aeval_iff_aevalR' in H0.  subst. reflexivity.
+  simpl. subst. reflexivity.
+  simpl. subst. reflexivity. 
+
+  generalize dependent bv.
+  induction b; intros. subst.  simpl. constructor.
+  subst. simpl. constructor.
+  subst. simpl. constructor. rewrite aeval_iff_aevalR'. reflexivity. 
+  rewrite aeval_iff_aevalR'. reflexivity.
+  subst. simpl. constructor. rewrite aeval_iff_aevalR'. reflexivity.
+  rewrite aeval_iff_aevalR'. reflexivity.
+  subst. simpl. constructor. apply IHb. reflexivity.
+  subst. simpl. constructor. apply IHb1. reflexivity.  
+  apply IHb2. reflexivity.
+ *) 
   split.
   intros.
   induction H; simpl in * ; try (apply aeval_iff_aevalR in H; apply aeval_iff_aevalR in H0) ; subst; reflexivity.
@@ -983,8 +1013,8 @@ Proof.
   destruct (eq_id_dec x x). 
   Case "x = x". 
     reflexivity.
-  Case "x <> x (impossible)". 
-    apply ex_falso_quodlibet. apply n. reflexivity. Qed.
+  Case "x <> x (impossible)".  
+  apply ex_falso_quodlibet. apply n. reflexivity. Qed.
 
 (** **** Exercise: 1 star, optional (neq_id)  *)
 Lemma neq_id : forall (T:Type) x y (p q:T), x <> y -> 
@@ -1053,7 +1083,7 @@ Theorem update_example : forall (n:nat),
   (update empty_state (Id 2) n) (Id 3) = 0.
 Proof.
   intros.
-  unfold update. apply neq_id. intros contradiction. inversion contradiction.
+  unfold update. (*simpl. constructor.*)   apply neq_id. intros contradiction. inversion contradiction.
 Qed.
   (** [] *)
 
@@ -1061,6 +1091,8 @@ Qed.
 Theorem update_shadow : forall n1 n2 x1 x2 (st : state),
    (update  (update st x2 n1) x2 n2) x1 = (update st x2 n2) x1.
 Proof.
+(*  intros. unfold update. destruct (eq_id_dec x2 x1). reflexivity. reflexivity.*) 
+  
   intros. unfold update. destruct (eq_id_dec x2 x1). reflexivity. reflexivity.
 Qed.
 (** [] *)
@@ -1070,6 +1102,9 @@ Theorem update_same : forall n1 x1 x2 (st : state),
   st x1 = n1 ->
   (update st x1 n1) x2 = st x2.
 Proof.
+(*  intros. unfold update. destruct (eq_id_dec x1 x2). subst. reflexivity.
+  reflexivity.
+*)  
   intros. unfold update. destruct (eq_id_dec x1 x2). subst. reflexivity. 
   reflexivity.
   Qed.
@@ -1080,6 +1115,11 @@ Theorem update_permute : forall n1 n2 x1 x2 x3 st,
   x2 <> x1 -> 
   (update (update st x2 n1) x1 n2) x3 = (update (update st x1 n2) x2 n1) x3.
 Proof.
+(*  intros.
+  unfold update. destruct (eq_id_dec x1 x3). destruct (eq_id_dec x2 x3).
+  subst. exfalso. apply H. reflexivity. reflexivity.
+  destruct (eq_id_dec x2 x3). reflexivity. reflexivity. 
+*)  
   intros. unfold update. destruct (eq_id_dec x1 x3).
   destruct (eq_id_dec x2 x3). rewrite e in H. exfalso. apply H. apply e0.
   reflexivity.
@@ -1493,6 +1533,21 @@ Theorem pup_to_2_ceval :
     update (update (update (update (update (update empty_state
       X 2) Y 0) Y 2) X 1) Y 3) X 0.
 Proof.
+ (* unfold pup_to_n.
+  apply E_Seq with (update (update empty_state X 2) Y 0). 
+  apply E_Ass. simpl. reflexivity.
+  apply E_WhileLoop with (update (update (update (update empty_state X 2) Y 0) Y 2) X 1). 
+  simpl. reflexivity. 
+  eapply E_Seq.
+  apply E_Ass. simpl. reflexivity.
+  apply E_Ass. simpl. reflexivity.
+  eapply E_WhileLoop.
+  simpl. reflexivity.
+  eapply E_Seq. apply E_Ass. reflexivity.
+  apply E_Ass. reflexivity.
+  apply E_WhileEnd. simpl. reflexivity.
+*)
+  
   unfold pup_to_n.
   apply E_Seq with (update (update empty_state X 2) Y 0).
   apply E_Ass. reflexivity.
@@ -1534,6 +1589,12 @@ Theorem ceval_deterministic: forall c st st1 st2,
      c / st || st2 ->
      st1 = st2.
 Proof.
+
+
+
+  
+
+  
   intros c st st1 st2 E1 E2.
   generalize dependent st2.
   ceval_cases (induction E1) Case;
@@ -1542,7 +1603,7 @@ Proof.
   Case "E_Ass". reflexivity.
   Case "E_Seq".
     assert (st' = st'0) as EQ1.
-      SCase "Proof of assertion". apply IHE1_1; assumption.
+      SCase "Proof of assertion". apply IHE1_1. assumption.
     subst st'0.
     apply IHE1_2. assumption.
   Case "E_IfTrue".
@@ -1590,6 +1651,7 @@ Proof.
      that st' must be st extended with the new value of X,
      since plus2 is an assignment *)
   inversion Heval. subst. clear Heval. simpl.
+  Print update_eq. 
   apply update_eq.  Qed.
 
 (** **** Exercise: 3 stars (XtimesYinZ_spec)  *)
@@ -1602,6 +1664,15 @@ Proof.
 Theorem loop_never_stops : forall st st',
   ~(loop / st || st').
 Proof.
+  (*
+  intros. unfold loop. 
+  intros contra. 
+  remember (WHILE BTrue DO SKIP END) as loopdef eqn:Heq. 
+  induction contra; inversion Heq; subst. 
+  inversion H. 
+  apply IHcontra2. reflexivity.
+*)
+  
   intros st st' contra. unfold loop in contra.
   remember (WHILE BTrue DO SKIP END) as loopdef eqn:Heqloopdef.
     (* Proceed by induction on the assumed derivation showing that
@@ -1642,7 +1713,28 @@ Inductive no_whilesR: com -> Prop :=
 Theorem no_whiles_eqv:
    forall c, no_whiles c = true <-> no_whilesR c.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  split.
+  intros. 
+  induction c.
+  constructor. constructor. constructor. apply IHc1. apply andb_true_elim1 in H.  assumption. apply andb_true_elim2 in H. apply IHc2. assumption.
+  constructor. apply IHc1. apply andb_true_elim1 in H. assumption.
+  apply IHc2. apply andb_true_elim2 in H. assumption. 
+  inversion H.
+
+  induction c; intros. constructor. 
+  constructor.
+  simpl. rewrite IHc1.  rewrite IHc2. reflexivity. 
+  inversion H; subst. apply H3.
+  inversion H; subst. apply H2.
+  simpl. rewrite IHc1. rewrite IHc2.  reflexivity.
+  inversion H; subst. apply H4. inversion H; subst. assumption.
+  inversion H. 
+Qed.
+
+    
+
+  
 (** [] *)
 
 (** **** Exercise: 4 stars (no_whiles_terminating)  *)
@@ -1655,6 +1747,27 @@ Proof.
 Theorem no_whiles_terminate: forall c st (NOWHL : no_whiles c = true),
                              exists st', c/ st || st'.
 Proof.
+(*  intros.
+  generalize dependent st.
+  induction c; intros. 
+  exists st. constructor. 
+  simpl in *. exists (update st i (aeval st a)). constructor. reflexivity.
+  simpl in *. apply andb_true_iff in NOWHL. inversion NOWHL.
+  apply IHc1 with st in H. inversion H. apply IHc2 with x in H0.
+  inversion H0 as [st2]. subst.
+  exists st2. apply E_Seq with x. assumption. assumption. 
+
+  simpl in *. apply andb_true_iff in NOWHL. inversion NOWHL.
+  apply IHc1 with st in H. inversion H. apply IHc2 with st in H0.  inversion H0.
+  destruct (beval st b) eqn:B.
+  exists x.  constructor. assumption. assumption.
+  exists x0. apply E_IfFalse. apply B. assumption. 
+
+  inversion NOWHL. 
+Qed.
+*)
+  
+  
   intros. generalize dependent st. 
   induction c; intros.
   exists st. constructor.

@@ -205,7 +205,26 @@ Proof.
 Lemma value_is_nf : forall t,
   value t -> step_normal_form t.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  
+  intros. unfold normal_form. unfold not.
+  intros.
+  inversion H0;subst. inversion H. 
+  inversion H2; subst. inversion H1.
+  inversion H1.
+  inversion H2; subst. inversion H1.
+  generalize dependent x.
+  induction H2. intros. 
+  inversion H1. 
+  intros. 
+  inversion H1; subst. 
+  eapply IHnvalue.
+  right. assumption. 
+  exists t1'. assumption. 
+  apply H5. 
+Qed.
+
+
+  
 (** [] *)
 
 
@@ -216,8 +235,41 @@ Proof.
 Theorem step_deterministic:
   deterministic step.
 Proof with eauto.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  unfold deterministic.
+  intros. generalize dependent y2.
+  step_cases (induction H) Case; subst; intros.
+-  inversion H0. reflexivity. 
+  solve by inversion. 
+-
+  inversion H0. reflexivity.
+  solve by inversion.
+- inversion H0; subst. solve by inversion.
+  solve by inversion.
+  f_equal.   auto. 
+- inversion H0. subst. f_equal.  auto. 
+- inversion H0. reflexivity. inversion H1. 
+- inversion H0. subst. reflexivity.
+  assert (value t1). right. assumption.
+  apply value_is_nf in H4. unfold normal_form, not in H4.
+  inversion H2; subst. exfalso. apply H4. exists t1'0. assumption. 
+- inversion H0; subst; try (solve by inversion).
+  assert (value y2). right. assumption.
+  apply value_is_nf in H1. unfold normal_form, not in H1.
+  inversion H; subst. exfalso. apply H1. exists t1'0. assumption.
+  apply IHstep in H2. rewrite H2. reflexivity.
+- inversion H0; subst. reflexivity. solve by inversion.
+- inversion H0; subst. reflexivity.
+  assert (value t1). right. assumption. apply value_is_nf in H1.
+  unfold normal_form, not in H1.
+  inversion H2; subst. exfalso. apply H1. exists t1'0. assumption.
+- inversion H0; subst; try (solve by inversion). 
+  assert (value t0). right. assumption. apply value_is_nf in H1. 
+  unfold normal_form, not in H1.
+  inversion H; subst. exfalso. apply H1. exists t1'0. assumption. 
+  rewrite (IHstep t1'0). reflexivity. assumption. 
+Qed. 
+  
+(** [] **)
 
 
 
@@ -332,7 +384,10 @@ Example succ_hastype_nat__hastype_nat : forall t,
   |- tsucc t \in TNat ->
   |- t \in TNat.  
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  inversion H; subst.
+  assumption. 
+Qed.
 (** [] *)
 
 (* ###################################################################### *)
@@ -391,7 +446,29 @@ Proof with auto.
     SCase "t1 can take a step".
       inversion H as [t1' H1].
       exists (tif t1' t2 t3)...
-  (* FILL IN HERE *) Admitted.
+      Case "T_Succ".
+      destruct IHHT.
+      apply (nat_canonical t1 HT) in H. 
+      inversion H; subst.
+      
+      left. auto.
+      left. auto.
+      inversion H; subst. right. exists (tsucc x). auto.
+      Case "T_Pred".
+  - destruct IHHT.
+    apply (nat_canonical t1 HT) in H.
+    inversion H; subst. 
+    right. exists tzero.  auto.
+    right. exists t. auto.
+    inversion H; subst.
+    right; eauto.     -
+    destruct IHHT. apply (nat_canonical t1 HT) in H.
+    inversion H; subst.
+    right. exists ttrue. auto.
+    right. exists tfalse. auto.
+    inversion H; subst.
+    right. eauto.  
+Qed.    
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced (finish_progress_informal)  *)
@@ -475,8 +552,17 @@ Proof with auto.
       SCase "ST_IFTrue". assumption.
       SCase "ST_IfFalse". assumption.
       SCase "ST_If". apply T_If; try assumption.
-        apply IHHT1; assumption.
-    (* FILL IN HERE *) Admitted.
+      apply IHHT1; assumption.
+  - inversion HE; subst. auto.    
+-  Case "T_Pred".
+   inversion HE; subst. auto.
+   inversion HT; subst. assumption.
+   auto. 
+-  Case "T_Iszero".
+    inversion HE; subst.
+    auto. auto. auto.
+      
+Qed.
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced (finish_preservation_informal)  *)
@@ -766,5 +852,110 @@ Proof.
 
 (* FILL IN HERE *)
 [] *)
+
+
+Fixpoint tyinfer (t: tm) : option ty :=
+    match t with
+    | ttrue => Some TBool
+    | tfalse => Some TBool
+    | tif t1 t2 t3 => match (tyinfer t1) with
+                | Some TBool => match (tyinfer t2) with
+                                | Some TBool => match (tyinfer t3) with
+                                    |Some TBool => Some TBool
+                                    |Some TNat => None
+                                    | None => None
+                                    end
+                                | Some TNat => match (tyinfer t3) with
+                                    |Some TBool => None
+                                    | Some TNat => Some TNat
+                                    | None => None
+                                    end
+                                | None => None
+                                end
+                | Some TNat => None
+                | None => None
+                end
+    | tzero => Some TNat
+    | tsucc t => match (tyinfer t) with
+                | Some TBool => None
+                | Some TNat => Some TNat
+                | None => None
+                end
+    | tpred t => match (tyinfer t) with
+                | Some TBool => None
+                | Some TNat => Some TNat
+                | None => None
+                end
+    | tiszero t => match (tyinfer t) with
+                | Some TBool => None
+                | Some TNat => Some TBool
+                | None => None
+                end
+
+    end.
+
+
+
+Example tyinfer_ex1:
+  tyinfer
+    (tif (tiszero (tpred (tsucc (tsucc tzero)))) ttrue (tiszero (tsucc tzero)))
+  = Some TBool.
+Proof. reflexivity. Qed.
+
+Example tyinfer_ex2:
+  tyinfer
+    (tif (tiszero (tpred (tsucc (tsucc tzero)))) tzero (tiszero (tsucc tzero)))
+  = None.
+Proof. reflexivity. Qed.
+
+
+Theorem tyinfer_correct1: forall t T
+    (TYCHK: tyinfer t = Some T),
+  |- t \in T.
+Proof.
+  intros.
+    generalize dependent T.
+
+      induction t; intros.
+      inversion TYCHK. constructor.
+      inversion TYCHK. constructor.
+  - destruct T. inversion TYCHK.   destruct (tyinfer t1) eqn:k1. destruct (tyinfer t2) eqn:k2.
+    destruct (tyinfer t3) eqn:k3. 
+    constructor. apply IHt1.
+
+
+    apply IHt1 in H0. apply IHt1 in H0. constructor. apply IHt1. 
+
+      
+      Abort. 
+
+Theorem tyinfer_correct2: forall t T
+    (HASTY: |- t \in T),
+  tyinfer t = Some T.
+Proof.
+  intros.
+  generalize dependent T.
+  induction t; intros.
+  - inversion T; inversion HASTY. auto. auto. 
+  - inversion T; inversion HASTY. auto. auto.
+  - inversion T; inversion HASTY; subst. apply IHt1 in H2.
+    apply IHt2 in H4. apply IHt3 in H5. simpl.  rewrite H2. rewrite H4.
+    rewrite H5. auto.  eauto.  destruct T.  reflexivity. reflexivity.
+    apply IHt1 in H2. apply IHt2 in H4. apply IHt3 in H5.
+    simpl. rewrite H2. rewrite H4. rewrite H5. destruct T. 
+    reflexivity. reflexivity.
+  - inversion T; inversion HASTY. auto. auto. 
+  - inversion T; inversion HASTY. apply IHt in H0. simpl. 
+    rewrite H0. reflexivity.
+    apply IHt in H0. simpl. rewrite H0. reflexivity.
+  -  inversion T; inversion HASTY. apply IHt in H0. simpl. 
+    rewrite H0. reflexivity.
+    apply IHt in H0. simpl. rewrite H0. reflexivity.
+  -  inversion T; inversion HASTY. apply IHt in H0. simpl. 
+    rewrite H0. reflexivity.
+    apply IHt in H0. simpl. rewrite H0. reflexivity.
+Qed.
+
+
 
 (** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)

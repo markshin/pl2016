@@ -282,7 +282,7 @@ Proof.
   (* First we need to transform the postcondition so
      that hoare_while will apply. *)
   eapply hoare_consequence_post.
-  apply hoare_while.
+  apply hoare_while. 
   Case "Loop body preserves invariant".
     (* Need to massage precondition before [hoare_asgn] applies *)
     eapply hoare_consequence_pre. apply hoare_asgn.
@@ -523,6 +523,7 @@ Proof.
       {{ Y = m }}
     Write an informal decorated program showing that this is correct. *)
 
+
 (* FILL IN HERE *)
 Theorem slow_assignment : forall m,
     {{ fun st => st X = m }}
@@ -533,26 +534,31 @@ Theorem slow_assignment : forall m,
     END
     {{ fun st => st Y = m }}.
 Proof.
-(*    intros.
-    remember (BNot (BEq (AId X) (ANum 0))) as b.
-    remember (fun st : state => st X + st Y = m) as P.
-  apply hoare_consequence_post with (Q' := (fun st:state => P st /\ beval st b = false)).
-  apply hoare_seq with (Q := P).
-  apply hoare_while. unfold hoare_triple. intros. subst.
-  inversion H0;subst. inversion H;subst.
-  inversion H7;subst. inversion H4; subst.
-  unfold update;simpl. simpl in H2.
-  apply negb_true in H2. apply beq_nat_false in H2.
-  destruct (st X). absurd (0<>0);eauto. omega.
-  apply hoare_consequence_pre with (P' := P [Y |-> ANum 0]).
-  apply hoare_asgn.
-  unfold assert_implies. unfold assn_sub.
-  unfold update. intros. subst. simpl. omega.
-  unfold assert_implies. intros. inversion H. subst. simpl in H1.
-  apply negb_false in H1.
-  apply beq_nat_true in H1. rewrite H1 in *. assumption.
- *)
-Admitted. 
+  intros.
+  apply hoare_seq with (Q := (fun st => st X + st Y = m)).
+  eapply hoare_consequence_post. 
+  apply hoare_while. 
+  eapply hoare_seq.  apply hoare_asgn. 
+  eapply hoare_consequence_pre. apply hoare_asgn. 
+
+  unfold assert_implies, bassn, assn_sub, update. 
+  simpl. intros. destruct H. 
+
+  rewrite negb_true_iff in H0. rewrite beq_nat_false_iff in H0.
+  omega.
+
+  unfold assert_implies, bassn, assn_sub, update. 
+  simpl. intros. destruct H. 
+
+  rewrite negb_true_iff in H0. rewrite beq_nat_false_iff in H0. 
+  omega.
+
+  eapply hoare_consequence_pre. apply hoare_asgn.
+unfold assert_implies, bassn, assn_sub, update. 
+simpl. intros. omega.
+Qed.   
+  
+  
 (** [] *)
 
 (* ####################################################### *)
@@ -582,8 +588,30 @@ Theorem slow_addition_dec_correct : forall n m,
   {{fun st => st Y = n + m}}.
 Proof.
   intros.
-  apply hoare_consequence with (P' := (fun st: state => st X + st Y = n + m)) (Q' := (fun st:state => st X + st Y = n + m /\ beval st (BNot (BEq (AId X) (ANum 0))) = false)).
-Abort. 
+  eapply hoare_consequence_post.
+  apply hoare_consequence_pre with (fun st => st X + st Y = n + m).
+  apply hoare_while.
+  eapply hoare_seq.
+  apply hoare_asgn.
+  eapply hoare_consequence_pre.
+  apply hoare_asgn.
+
+  unfold assert_implies, bassn, assn_sub, update.
+  simpl. intros. destruct H.
+  rewrite negb_true_iff in H0. rewrite beq_nat_false_iff in H0.
+  omega. 
+
+  unfold assert_implies, bassn, assn_sub, update. 
+  simpl. intros. destruct H. omega. 
+
+  unfold assert_implies, bassn, assn_sub, update. 
+  simpl. intros. destruct H.
+  rewrite negb_true_iff in H0. rewrite beq_nat_false_iff in H0. 
+  omega. 
+
+Qed.
+
+
 (** [] *)
 
 (* ####################################################### *)
@@ -663,22 +691,24 @@ Theorem parity_correct : forall m,
     {{ fun st => st X = parity m }}.
 Proof.
   intros.
-  apply hoare_consequence with (P' := (fun st:state => parity (st X) = parity m))
-                              
-  (Q' := (fun st:state => parity (st X) = parity m /\ beval st (BLe (ANum 2) (AId X)) = false )).
-(*    apply hoare_while.
-    unfold hoare_triple;intros;inversion H0.
-    apply ble_nat_true in H2.
-    simpl in H2. apply parity_ge_2 in H2.
-    rewrite <- H1. inversion H;subst.
-    unfold update; simpl. assumption.
-    unfold assert_implies.
-    intros. auto. unfold assert_implies.
-    intros. inversion H.
-    apply ble_nat_false in H1. simpl in H1.
-    apply parity_lt_2 in H1. rewrite <- H0. auto.
- *)
-  Abort.
+  apply hoare_consequence_pre with (fun st => parity (st X) = parity m). 
+  eapply hoare_consequence_post. apply hoare_while. 
+  eapply hoare_consequence_pre. apply hoare_asgn.
+
+  unfold assert_implies. unfold assn_sub.
+  unfold update, bassn. 
+  intros. simpl. destruct H. rewrite <- H. apply parity_ge_2.
+  apply ble_nat_true. apply H0. 
+
+  unfold assert_implies, assn_sub, update, bassn. 
+  intros.   destruct H. rewrite <- H. symmetry. apply parity_lt_2. 
+  apply ble_nat_false. SearchAbout beval. SearchAbout ( _ <> true) .
+  apply not_true_is_false in H0. apply H0. 
+
+  unfold assert_implies. intros. 
+  auto. 
+Qed.
+
 (** [] *)
 
 (* ####################################################### *)
@@ -867,9 +897,9 @@ Proof.
   unfold assert_implies, assn_sub, update. simpl. intros.
   destruct H. unfold bassn in H0.  simpl in H0.
   SearchAbout negb. apply negb_true_iff in H0. 
-  apply beq_nat_false in H0. rewrite <- H.
+  apply beq_nat_false in H0. rewrite <- H.   
   assert (st X * fact (st X - 1) = fact (st X)).
-  induction (st X). tauto.
+  induction (st X). simpl.  tauto.
   simpl. rewrite <- minus_n_O. reflexivity.
   rewrite <- mult_assoc. rewrite H1. reflexivity.
 
@@ -901,41 +931,39 @@ Theorem add_three_numbers_correct: forall a b c,
   END
   {{ fun st => st Z = a + b + c }}.
 Proof.
-  (*
-  intros. eapply hoare_seq. eapply hoare_seq.
-  apply hoare_seq with (fun st => st Z = st X + c /\ st Y = 0).
-  apply hoare_seq with (fun st => st Z = st Y + a + c).
+  intros.
+  eapply hoare_seq. eapply hoare_seq. 
+  apply hoare_seq with (fun st => st Z = st X + c /\ st Y = 0). 
+  apply hoare_seq with (fun st => st Z = st Y + a + c). 
   eapply hoare_consequence_post. apply hoare_while.
-  eapply hoare_seq. apply hoare_asgn.
-  eapply hoare_consequence_pre. apply hoare_asgn.
-  unfold assert_implies, assn_sub, update. simpl. intros. destruct H.
-  apply negb_true in H0. apply beq_nat_false in H0. omega.
-  unfold assert_implies, assn_sub, update. simpl. intros. destruct H.
-  apply negb_false in H0. apply beq_nat_true in H0. omega.
-  eapply hoare_consequence_post. apply hoare_while.
-  eapply hoare_seq. apply hoare_asgn.
-  eapply hoare_consequence_pre. apply hoare_asgn.
-  unfold assert_implies, assn_sub, update. simpl. intros. destruct H.
-  destruct H. apply negb_true in H0. apply beq_nat_false in H0. omega.
-  unfold assert_implies, assn_sub, update. simpl. intros. destruct H.
-  destruct H. apply negb_false in H0. apply beq_nat_true in H0. omega.
+  eapply hoare_seq. apply hoare_asgn. eapply hoare_consequence_pre.
+  apply hoare_asgn. 
+
+  unfold assert_implies, assn_sub, update.
+  simpl. intros. destruct H. omega.
+  unfold assert_implies, assn_sub, update, bassn.
+  simpl. intros. destruct H. SearchAbout (_ <> true).
+  apply eq_true_negb_classical in H0. apply beq_nat_true in H0. omega. 
+
+  eapply hoare_consequence_post. apply hoare_while. 
+  eapply hoare_seq. apply hoare_asgn. eapply hoare_consequence_pre.
+  apply hoare_asgn.
+
+  unfold assert_implies, assn_sub, update, bassn. 
+  simpl. intros. destruct H. split.  destruct H.
+  omega. destruct H. omega.
+
+  unfold assert_implies, assn_sub, update, bassn. 
+
+  simpl. intros. destruct H. destruct H. apply eq_true_negb_classical in H0.  
+  apply beq_nat_true in H0. omega.
+
   apply hoare_asgn. apply hoare_asgn.
   eapply hoare_consequence_pre. apply hoare_asgn.
-  unfold assert_implies, assn_sub, update. simpl. intros. destruct H.
-  split; omega.
+  unfold assert_implies, assn_sub, update. simpl. 
+  intros. auto. 
+Qed.
 
-
-
-
-
-  
-  intros.
-  eapply hoare_seq. eapply hoare_seq.
-  apply hoare_seq with (fun st => st Z = st X + c /\ st Y =0). 
-  apply hoare_seq with (fun st => st Z = st Y + a + c). 
-  eapply hoare_consequence_post. apply hoare_while. 
-   *)
-  Admitted.
 (* ####################################################### *)
 (** ** Exercise: MIN *)
 
@@ -1122,15 +1150,26 @@ Proof.
   unfold hoare_triple. intros.
   inversion H; subst. unfold update.
   simpl. omega.
+  
   unfold hoare_triple. 
   unfold assert_implies. intros.
-  assert (HH := H st (update st X (aeval st (APlus (AId Y) (ANum 1))))).
+
+  specialize H with st (update st X (st Y + 1)).
+  assert (update st X (st Y + 1) X <= 5). 
+  apply H. apply E_Ass. simpl. auto. 
+  auto. 
+  rewrite update_eq in H1. omega.
+  
+  
+(*    assert (HH := H st (update st X (aeval st (APlus (AId Y) (ANum 1))))).
   simpl in HH. 
   assert (( X ::= APlus (AId Y) (ANum 1)) / st || update st X (st Y + 1)).
   apply E_Ass. simpl.
   reflexivity. 
   apply HH in H1. unfold update in H1. simpl in H1. 
   omega. assumption.
+*)
+
 Qed.
 
 (** [] *)
@@ -1142,6 +1181,15 @@ Qed.
 Theorem hoare_asgn_weakest : forall Q X a,
   is_wp (Q [X |-> a]) (X ::= a) Q.
 Proof.
+(*  unfold is_wp, hoare_triple, assn_sub. 
+  split.
+  intros. inversion H;subst. auto. 
+  intros. unfold assert_implies.
+  intros.
+  specialize H with st (update st X (aeval st a )).
+  apply H. apply E_Ass. auto. auto. 
+*)  
+  
   unfold is_wp.
   split.
   apply hoare_asgn.
