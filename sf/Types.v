@@ -185,7 +185,19 @@ Hint Unfold stuck.
 Example some_term_is_stuck :
   exists t, stuck t.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  unfold stuck.
+  exists (tsucc ttrue).
+  split. 
+  unfold normal_form. unfold not.
+  intros.
+  inversion H; subst. inversion H0; subst.
+  inversion H2. 
+  unfold not.
+  intros.
+  inversion H;subst. inversion H0; subst. inversion H0; subst. inversion H2. 
+Qed.
+
+  
 (** [] *)
 
 (** However, although values and normal forms are not the same in this
@@ -204,13 +216,23 @@ Proof.
 
 Lemma value_is_nf : forall t,
   value t -> step_normal_form t.
-Proof.
-  
+Proof. 
+(*  unfold normal_form. unfold not.
+  intros t H.
+  inversion H. 
+  - inversion H0.   intros [t' Hst']. inversion Hst'.
+    intros [t' H2]. inversion H2. 
+    - induction H0. intros [t' Hst']; inversion Hst'. 
+      intros [t' Hst']. inversion Hst'; subst. 
+      apply IHnvalue. right. assumption.
+      exists t1'. assumption.
+*)  
   intros. unfold normal_form. unfold not.
   intros.
   inversion H0;subst. inversion H. 
   inversion H2; subst. inversion H1.
   inversion H1.
+
   inversion H2; subst. inversion H1.
   generalize dependent x.
   induction H2. intros. 
@@ -238,7 +260,7 @@ Proof with eauto.
   unfold deterministic.
   intros. generalize dependent y2.
   step_cases (induction H) Case; subst; intros.
--  inversion H0. reflexivity. 
+  -  inversion H0. reflexivity.
   solve by inversion. 
 -
   inversion H0. reflexivity.
@@ -401,7 +423,7 @@ Lemma bool_canonical : forall t,
   |- t \in TBool -> value t -> bvalue t.
 Proof.
   intros t HT HV.
-  inversion HV; auto.
+  inversion HV. auto.
 
   induction H; inversion HT; auto.
 Qed.
@@ -608,8 +630,22 @@ Theorem preservation' : forall t t' T,
   t ==> t' ->
   |- t' \in T.
 Proof with eauto.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros.
+  generalize dependent t'.
+  induction H; intros.
+  -  inversion H0.
+     - inversion H0. 
+     - inversion H2; subst. assumption. assumption.
+       auto.
+     - inversion H0. 
+     - inversion H0; subst. auto.
+       - inversion H0; subst. auto. inversion H;subst.  assumption. 
+         auto. 
+       - inversion H0; subst. auto. auto. auto. 
+Qed.
+
+         
+  (** [] *)
 
 (* ###################################################################### *)
 (** ** Type Soundness *)
@@ -626,7 +662,7 @@ Corollary soundness : forall t t' T,
   ~(stuck t').
 Proof. 
   intros t t' T HT P. induction P; intros [R S].
-  destruct (progress x T HT); auto.   
+  destruct (progress x T HT). auto.   auto. 
   apply IHP.  apply (preservation x y T HT H).
   unfold stuck. split; auto.   Qed.
 
@@ -710,7 +746,7 @@ Qed.
 Example astep_example1''' : exists e',
   (APlus (ANum 3) (AMult (ANum 3) (ANum 4))) / empty_state 
   ==>a* e'.
-Proof.
+Proof. 
   eapply ex_intro. normalize.
 
 (* This time, the trace will be:
@@ -729,8 +765,8 @@ Theorem normalize_ex : exists e',
   (AMult (ANum 3) (AMult (ANum 2) (ANum 1))) / empty_state 
   ==>a* e'.
 Proof.
-  (* FILL IN HERE *) Admitted.
-
+  eapply ex_intro. normalize. 
+Qed.
 (** [] *)
 
 (** **** Exercise: 1 star, optional (normalize_ex')  *)
@@ -740,7 +776,8 @@ Theorem normalize_ex' : exists e',
   (AMult (ANum 3) (AMult (ANum 2) (ANum 1))) / empty_state 
   ==>a* e'.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  eapply ex_intro. normalize. 
+Qed.
 (** [] *)
 
 
@@ -758,10 +795,22 @@ Proof.
     (* FILL IN HERE *)
 [] *)
 
+Theorem subject_expansion_false:
+  exists t t' T,
+    t ==> t' /\
+    |- t' \in T /\
+    ~ |- t \in T.
+Proof.
+  exists (tif ttrue ttrue tzero).  
+  exists ttrue.
+  exists TBool. 
+  split. auto.
+  split. auto.
+  unfold not. intros. inversion H; subst.
+  inversion H6. 
+Qed.
 
-
-
-(** **** Exercise: 2 stars (variation1)  *)
+  (** **** Exercise: 2 stars (variation1)  *)
 (** Suppose, that we add this new rule to the typing relation: 
       | T_SuccBool : forall t,
            |- t \in TBool ->
@@ -914,19 +963,15 @@ Theorem tyinfer_correct1: forall t T
   |- t \in T.
 Proof.
   intros.
-    generalize dependent T.
+  generalize dependent T. 
+  induction t; intros. 
+  - inversion TYCHK. auto. 
+  - inversion TYCHK. auto. 
+  - inversion TYCHK. subst.
+    specialize IHt1 with TBool.
+        specialize IHt2 with TBool.
+    specialize IHt3 with TBool.
 
-      induction t; intros.
-      inversion TYCHK. constructor.
-      inversion TYCHK. constructor.
-  - destruct T. inversion TYCHK.   destruct (tyinfer t1) eqn:k1. destruct (tyinfer t2) eqn:k2.
-    destruct (tyinfer t3) eqn:k3. 
-    constructor. apply IHt1.
-
-
-    apply IHt1 in H0. apply IHt1 in H0. constructor. apply IHt1. 
-
-      
       Abort. 
 
 Theorem tyinfer_correct2: forall t T

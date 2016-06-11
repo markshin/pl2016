@@ -281,8 +281,14 @@ Corollary typable_empty__closed : forall t T,
     empty |- t \in T  ->
     closed t.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros.
+  unfold closed.
+  unfold not. 
+  intros. 
+  apply free_in_context with (T := T) (Gamma :=\empty) in H0.  inversion H0.  inversion H1. apply H.  
+Qed.
+
+  (** [] *)
 
 (** Sometimes, when we have a proof [Gamma |- t : T], we will need to
     replace [Gamma] by a different context [Gamma'].  When is it safe

@@ -852,7 +852,7 @@ Inductive bevalR: bexp -> bool -> Prop :=
 
 Theorem beval_iff_bevalR : forall b bv, bevalR b bv <-> beval b = bv.
 Proof.
-(*  split.
+  split.
   intros.
   induction H.  simpl. reflexivity. simpl. reflexivity. 
   simpl. rewrite aeval_iff_aevalR' in H. rewrite aeval_iff_aevalR' in H0.
@@ -871,14 +871,14 @@ Proof.
   subst. simpl. constructor. apply IHb. reflexivity.
   subst. simpl. constructor. apply IHb1. reflexivity.  
   apply IHb2. reflexivity.
- *) 
-  split.
+  
+ (* split.
   intros.
   induction H; simpl in * ; try (apply aeval_iff_aevalR in H; apply aeval_iff_aevalR in H0) ; subst; reflexivity.
 
   generalize dependent bv.
   induction b; intros; simpl in *; subst; constructor; try(rewrite aeval_iff_aevalR); try (apply IHb); try (apply IHb1); try (apply IHb2); reflexivity.
-
+*)
   Qed.
 (** [] *)
 End AExp.
@@ -1533,7 +1533,7 @@ Theorem pup_to_2_ceval :
     update (update (update (update (update (update empty_state
       X 2) Y 0) Y 2) X 1) Y 3) X 0.
 Proof.
- (* unfold pup_to_n.
+  unfold pup_to_n.
   apply E_Seq with (update (update empty_state X 2) Y 0). 
   apply E_Ass. simpl. reflexivity.
   apply E_WhileLoop with (update (update (update (update empty_state X 2) Y 0) Y 2) X 1). 
@@ -1546,8 +1546,8 @@ Proof.
   eapply E_Seq. apply E_Ass. reflexivity.
   apply E_Ass. reflexivity.
   apply E_WhileEnd. simpl. reflexivity.
-*)
-  
+
+ (* 
   unfold pup_to_n.
   apply E_Seq with (update (update empty_state X 2) Y 0).
   apply E_Ass. reflexivity.
@@ -1564,7 +1564,8 @@ Proof.
   apply E_Ass. reflexivity.
   apply E_Ass.  reflexivity.
   apply E_WhileEnd. reflexivity.
-  Qed.
+*)
+Qed.
 (** [] *)
 
 
@@ -1664,15 +1665,15 @@ Proof.
 Theorem loop_never_stops : forall st st',
   ~(loop / st || st').
 Proof.
-  (*
+  
   intros. unfold loop. 
   intros contra. 
   remember (WHILE BTrue DO SKIP END) as loopdef eqn:Heq. 
   induction contra; inversion Heq; subst. 
   inversion H. 
   apply IHcontra2. reflexivity.
-*)
-  
+
+(*  
   intros st st' contra. unfold loop in contra.
   remember (WHILE BTrue DO SKIP END) as loopdef eqn:Heqloopdef.
     (* Proceed by induction on the assumed derivation showing that
@@ -1682,6 +1683,7 @@ Proof.
    
   induction contra;  inversion Heqloopdef.
   subst. inversion H. subst. apply IHcontra2. reflexivity.
+*)
 Qed.
   (** [] *)
 

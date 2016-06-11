@@ -387,15 +387,42 @@ where "'[' x ':=' s ']' t" := (subst x s t).
 Inductive substi (s:tm) (x:id) : tm -> tm -> Prop := 
   | s_var1 : 
       substi s x (tvar x) s
-  (* FILL IN HERE *)
+  | s_var2 :
+      forall y, x <> y -> substi s x (tvar x) (tvar y)
+  | s_abs1 :
+      forall m T,
+        substi s x (tabs x T m) (tabs x T m)
+  | s_abs2 :
+      forall m m' T y,
+        x <> y ->
+        substi s x m m' ->
+        substi s x (tabs y T m) (tabs y T m')
+  | s_app :
+      forall t1 t2 t1' t2',
+        substi s x t1 t1' ->
+        substi s x t2 t2' ->
+        substi s x (tapp t1 t2) (tapp t1' t2')
+  | s_true :
+      substi s x ttrue ttrue
+  | s_false :
+      substi s x tfalse tfalse
+  | s_if :
+      forall t1 t2 t3 t1' t2' t3',
+        substi s x t1 t1' ->
+        substi s x t2 t2' ->
+        substi s x t3 t3' ->
+        substi s x (tif t1 t2 t3) (tif t1' t2' t3')
 .
+
 
 Hint Constructors substi.
 
 Theorem substi_correct : forall s x t t',
   [x:=s]t = t' <-> substi s x t t'.
 Proof.
-  (* FILL IN HERE *) Admitted.
+
+  Abort.
+  
 (** [] *)
 
 (* ################################### *)
@@ -795,6 +822,7 @@ Proof.
   inversion H4. subst. clear H4.
   inversion H2. subst. clear H2.
   inversion H5. subst. clear H5.
+  
   (* rewrite extend_neq in H1. rewrite extend_eq in H1. *)
   inversion H1.  Qed.
 
@@ -802,8 +830,18 @@ Proof.
 (** Another nonexample:
     ~ (exists S, exists T,
           empty |- \x:S. x x : T).
-*)
+ *)
 
+Lemma K:
+  forall T1 T2, ~ T1 = TArrow T1 T2.
+Proof.
+  unfold not.
+  intros. generalize dependent T2. 
+  induction T1; intros; 
+  inversion H.
+  apply IHT1_1 in H1. assumption. 
+Qed.
+  
 Example typing_nonexample_3 :
   ~ (exists S, exists T,
         empty |- 
@@ -811,8 +849,24 @@ Example typing_nonexample_3 :
              (tapp (tvar x) (tvar x))) \in
           T).
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros Hc.
+  destruct Hc.
+  destruct H. 
+ 
+  inversion H; subst. clear H.
+  inversion H5; subst. clear H5.
+  inversion H2; subst. clear H2. 
+  inversion H4; subst. clear H4.
+  
+  rewrite extend_eq in H1.
+  rewrite extend_eq in H2. rewrite H1 in H2. 
+  inversion H2. 
+   symmetry in H0. 
+  apply K in H0. 
+  assumption.
+Qed.
+
+  (** [] *)
 
 
 
